@@ -7,23 +7,16 @@ import MainLayout from "@/components/MainLayout";
 import Footer from "@/components/Footer";
 import TopStrokes from "@/components/TopStrokes";
 
-/* Import helpers de API */
+/* API helpers */
 import { getAboutArticles } from "@/lib/about";
 import { getDesignArticles } from "@/lib/design";
 import { getPhotographyPhotos } from "@/lib/photography";
 import { getWritingArticles } from "@/lib/writing";
 
-/* utilidades */
-const toSlug = (s: string) =>
-  s
-    .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/[^\w-]/g, "");
-
+/* ───────────────── helpers ───────────────── */
 const normalizeImagePath = (path?: string | null): string =>
   path?.startsWith("http") ? path : path ? `/${path.replace(/^\/+/, "")}` : "";
 
-/* ─── type helpers ─── */
 type Thumb = { src: string; href: string; alt: string };
 
 const sampleN = <T,>(arr: T[], n: number, hasImg: (item: T) => boolean) => {
@@ -33,7 +26,7 @@ const sampleN = <T,>(arr: T[], n: number, hasImg: (item: T) => boolean) => {
     .slice(0, Math.min(n, withImg.length));
 };
 
-/* ─── props ─── */
+/* ───────────── props ───────────── */
 interface HomeProps {
   writingData: any[];
   photoData: any[];
@@ -41,26 +34,25 @@ interface HomeProps {
   aboutData: any[];
 }
 
-/* ─── componente ─── */
+/* ─────────── component ─────────── */
 export default function Home({
   writingData,
   photoData,
   designData,
   aboutData,
 }: HomeProps) {
-  /* links de Writing (solo texto) */
+  /* Writing (solo texto) */
   const writingLinks = writingData.slice(0, 18).map((a) => ({
     label: a.title,
     href: `/writing/${a.category}/${a.slug}`,
   }));
 
-  /* thumbnails */
   const [photoThumbs, setPhotoThumbs] = useState<Thumb[]>([]);
   const [designThumbs, setDesignThumbs] = useState<Thumb[]>([]);
   const [pubThumbs, setPubThumbs] = useState<Thumb[]>([]);
 
   useEffect(() => {
-    /* PHOTOGRAPHY – usa imageThumbCenter o cualquier thumb que exista */
+    /* PHOTOGRAPHY – usa cualquier thumb disponible */
     setPhotoThumbs(
       sampleN(
         photoData,
@@ -75,7 +67,7 @@ export default function Home({
       }))
     );
 
-    /* DESIGN – prioriza center > top > bottom > imageFull */
+    /* DESIGN – prioridad center > top > bottom > imageFull */
     setDesignThumbs(
       sampleN(
         designData,
@@ -99,12 +91,12 @@ export default function Home({
       })
     );
 
-    /* PUBLICATIONS */
+    /* ABOUT / PUBLICATIONS – ahora a /about/<slug> */
     setPubThumbs(
       sampleN(aboutData, 3, (p: any) => p.imageThumb || p.imageFull).map(
         (p: any) => ({
           src: normalizeImagePath(p.imageThumb || p.imageFull),
-          href: `/about#${toSlug(p.title)}`,
+          href: `/about/${p.slug}`, // ← link directo al slug
           alt: p.title,
         })
       )
@@ -141,8 +133,8 @@ export default function Home({
           <SectionHeading title="Design" />
           <ThumbRow thumbs={designThumbs} />
 
-          {/* PUBLICATIONS */}
-          <SectionHeading title="Publications" />
+          {/* ABOUT */}
+          <SectionHeading title="About" />
           <ThumbRow thumbs={pubThumbs} />
 
           <Footer />
@@ -152,7 +144,7 @@ export default function Home({
   );
 }
 
-/* ─── getStaticProps ─── */
+/* ────────── getStaticProps ────────── */
 export async function getStaticProps() {
   const [writingData, photoData, designData, aboutData] = await Promise.all([
     getWritingArticles(),
@@ -167,7 +159,7 @@ export async function getStaticProps() {
   };
 }
 
-/* ─── helpers visuales ─── */
+/* ─────────── UI helpers ─────────── */
 function SectionHeading({ title }: { title: string }) {
   return (
     <h2
