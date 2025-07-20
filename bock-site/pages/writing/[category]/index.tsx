@@ -39,7 +39,7 @@ export async function getStaticProps({
 
   // Construir lista de artículos relacionados
   const related: LinkItem[] = articles
-    .filter((a) => a.category === category && a.slug !== firstInCat.slug)
+    .filter((a) => a.category === category)
     .map((a) => ({
       label: a.title,
       href: `/writing/${category}/${a.slug}`,

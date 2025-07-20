@@ -57,7 +57,7 @@ export async function getStaticProps({
 
   // Artículos relacionados (mismo category, distinto slug)
   const related: LinkItem[] = articles
-    .filter((a) => a.category === category && a.slug !== slug)
+    .filter((a) => a.category === category)
     .map((a) => ({
       label: a.title,
       href: `/writing/${category}/${a.slug}`,
