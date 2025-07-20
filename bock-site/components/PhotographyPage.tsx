@@ -109,7 +109,7 @@ export default function PhotographyPage({ initialData }: PhotographyPageProps) {
                 <img
                   src={active.imageFull}
                   alt={active.title}
-                  className="w-full max-h-[80vh] object-contain border border-gray-300 rounded-md"
+                  className="w-full max-h-[80vh] object-contain border"
                 />
               )}
               {active.title && (
