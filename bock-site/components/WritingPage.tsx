@@ -51,18 +51,32 @@ export default function WritingPage({
   }
 
   // Construye related para el activo (ya viene initialRelated para intro)
-  const related =
-    "slug" in active
-      ? byCategory(active.category)
-          .filter((a) => a.slug !== active.slug)
-          .map((a) => ({
-            label: a.title,
-            href: `/writing/${a.category}/${a.slug}`,
-          }))
-      : articles.map((a) => ({
+  // --- RELATED --------------------------------------------------------------
+  const related: LinkItem[] = (() => {
+    // 1) estamos en /writing/[category]/[slug]
+    if (slug && category) {
+      return byCategory(category)
+        .filter((a) => a.slug !== slug)
+        .map((a) => ({
           label: a.title,
           href: `/writing/${a.category}/${a.slug}`,
         }));
+    }
+
+    // 2) estamos en /writing/[category]  (sin slug)
+    if (category) {
+      return byCategory(category).map((a) => ({
+        label: a.title,
+        href: `/writing/${a.category}/${a.slug}`,
+      }));
+    }
+
+    // 3) estamos en /writing  (index)  → todo el sitio
+    return articles.map((a) => ({
+      label: a.title,
+      href: `/writing/${a.category}/${a.slug}`,
+    }));
+  })();
 
   // Aplica tema
   useEffect(() => {
