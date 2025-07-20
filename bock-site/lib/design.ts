@@ -1,22 +1,21 @@
-// lib/design.ts
+/* lib/design.ts */
+const API =
+  process.env.API_URL ||
+  process.env.NEXT_PUBLIC_API_URL ||
+  "http://localhost:1337";
 
-const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337";
-
-/* ---------------------------------- helpers --------------------------------- */
+/* ---------- helpers ---------- */
 const normalize = <T = any>(v: T | undefined): T | null =>
   v === undefined ? null : v;
 
-/** Devuelve URL absoluta si es relativa; si ya viene http(s) la deja igual. */
 const abs = (u?: string | null): string | null => {
   if (!u) return null;
   return /^https?:\/\//i.test(u) ? u : `${API}${u}`;
 };
 
-/** Extrae url desde un campo que puede ser string, objeto media, o null. */
 const getUrl = (v: any): string | null => {
   if (!v) return null;
   if (typeof v === "string") return abs(v);
-  // Strapi v5 media shape: { data: { attributes: { url: "/uploads/..." } } }
   const url =
     v?.url ??
     v?.data?.attributes?.url ??
@@ -26,8 +25,8 @@ const getUrl = (v: any): string | null => {
   return abs(url);
 };
 
-/* ----------------------------------- tipos ---------------------------------- */
-export interface Design {
+/* ---------- tipos ---------- */
+export interface DesignItem {
   id: number;
   title: string;
   subtitle?: string | null;
@@ -38,19 +37,19 @@ export interface Design {
   imageThumbTop?: string | null;
   imageThumbCenter?: string | null;
   imageThumbBottom?: string | null;
-  imageThumb?: string | null; // legacy / fallback
+  imageThumb?: string | null; // legado
   imageFull?: string | null;
 }
 
-export interface Intro {
+export interface DesignIntro {
   title: string;
   subtitle?: string | null;
   body: any;
   heroImage?: string | null;
 }
 
-/* ---------------------------------- intro ----------------------------------- */
-export const getDesignIntro = async (): Promise<Intro> => {
+/* ---------- intro ---------- */
+export async function getDesignIntro(): Promise<DesignIntro> {
   try {
     const res = await fetch(`${API}/api/design-intro?populate=*`);
     const json = await res.json();
@@ -63,13 +62,13 @@ export const getDesignIntro = async (): Promise<Intro> => {
       heroImage: getUrl(attr.heroImage),
     };
   } catch (err) {
-    console.error("Error fetching design intro:", err);
-    return { title: "Design", subtitle: null, body: null, heroImage: null };
+    console.error("Error design intro", err);
+    return { title: "Design", subtitle: null, body: [], heroImage: null };
   }
-};
+}
 
-/* --------------------------------- artículos -------------------------------- */
-export const getDesignArticles = async (): Promise<Design[]> => {
+/* ---------- artículos ---------- */
+export async function getDesignArticles(): Promise<DesignItem[]> {
   try {
     const res = await fetch(
       `${API}/api/designs?populate=*&pagination[pageSize]=100`
@@ -77,9 +76,8 @@ export const getDesignArticles = async (): Promise<Design[]> => {
     const json = await res.json();
     const list = Array.isArray(json?.data) ? json.data : [];
 
-    return list.map((item: any): Design => {
+    return list.map((item: any): DesignItem => {
       const attr = item?.attributes ?? item ?? {};
-
       const pos =
         attr.thumbPos === "top" ||
         attr.thumbPos === "center" ||
@@ -98,18 +96,27 @@ export const getDesignArticles = async (): Promise<Design[]> => {
         imageThumbTop: getUrl(attr.imageThumbTop),
         imageThumbCenter: getUrl(attr.imageThumbCenter),
         imageThumbBottom: getUrl(attr.imageThumbBottom),
-        imageThumb: getUrl(attr.imageThumb), // fallback legacy
+        imageThumb: getUrl(attr.imageThumb),
         imageFull: getUrl(attr.imageFull),
       };
     });
   } catch (err) {
-    console.error("Error fetching design articles:", err);
+    console.error("Error design articles", err);
     return [];
   }
-};
+}
 
-/* ----------------------------------- slugs ---------------------------------- */
-export const getDesignSlugs = async (): Promise<string[]> => {
-  const articles = await getDesignArticles();
-  return articles.map((a) => a.slug);
-};
+/* ---------- slugs ---------- */
+export async function getDesignSlugs(): Promise<string[]> {
+  try {
+    const res = await fetch(
+      `${API}/api/designs?fields[0]=slug&pagination[pageSize]=100`
+    );
+    const json = await res.json();
+    const list = Array.isArray(json?.data) ? json.data : [];
+    return list.map((i: any) => i.attributes?.slug || i.slug).filter(Boolean);
+  } catch (err) {
+    console.error("Error design slugs", err);
+    return [];
+  }
+}
