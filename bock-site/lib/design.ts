@@ -1,7 +1,8 @@
 // lib/design.ts
+/* ───────────────────────────── config ──────────────────────────────── */
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337";
 
-/* ---------------------------------------------------------------- helpers -- */
+/* ───────────────────────────── helpers ─────────────────────────────── */
 const normalize = <T = any>(v: T | undefined): T | null =>
   v === undefined ? null : v;
 
@@ -11,33 +12,37 @@ const abs = (u?: string | null): string | null => {
   return /^https?:\/\//i.test(u) ? u : `${API}${u}`;
 };
 
-/** Extrae url desde un campo que puede ser string, objeto media, o null. */
+/** Extrae url desde un campo que puede ser string, objeto media o null. */
 const getUrl = (v: any): string | null => {
   if (!v) return null;
   if (typeof v === "string") return abs(v);
-  // Strapi v4/v5: { data:{ attributes:{ url:"/uploads/…" } } }
+
+  /* Strapi v4/v5: media puede venir en varias formas */
   const url =
     v?.url ??
     v?.data?.attributes?.url ??
     v?.data?.url ??
     v?.attributes?.url ??
     null;
+
   return abs(url);
 };
 
-/* ----------------------------------------------------------------- tipos -- */
+/* ────────────────────────────── tipos ──────────────────────────────── */
 export interface Design {
   id: number;
   title: string;
   subtitle?: string | null;
   body: any;
   slug: string;
+
+  /* imágenes */
   thumbPos?: "top" | "center" | "bottom" | null;
   imageWatermarked?: string | null;
   imageThumbTop?: string | null;
   imageThumbCenter?: string | null;
   imageThumbBottom?: string | null;
-  imageThumb?: string | null; // legacy
+  imageThumb?: string | null; // fallback legacy
   imageFull?: string | null;
 }
 
@@ -48,7 +53,10 @@ export interface Intro {
   heroImage?: string | null;
 }
 
-/* -------------------------------------------------------------- intro API -- */
+/* alias que los pages siguen importando */
+export type DesignItem = Design;
+
+/* ───────────────────────────── Intro ───────────────────────────────── */
 export const getDesignIntro = async (): Promise<Intro> => {
   try {
     const res = await fetch(`${API}/api/design-intro?populate=*`);
@@ -58,16 +66,21 @@ export const getDesignIntro = async (): Promise<Intro> => {
     return {
       title: attr.title || "Design",
       subtitle: normalize(attr.subtitle),
-      body: attr.content || [],
+      body: attr.content ?? [],
       heroImage: getUrl(attr.heroImage),
     };
   } catch (err) {
     console.error("Error fetching design intro:", err);
-    return { title: "Design", subtitle: null, body: null, heroImage: null };
+    return {
+      title: "Design",
+      subtitle: null,
+      body: [],
+      heroImage: null,
+    };
   }
 };
 
-/* ----------------------------------------------------------- artículos API -- */
+/* ─────────────────────────── artículos ─────────────────────────────── */
 export const getDesignArticles = async (): Promise<Design[]> => {
   try {
     const res = await fetch(
@@ -78,6 +91,7 @@ export const getDesignArticles = async (): Promise<Design[]> => {
 
     return list.map((item: any): Design => {
       const attr = item?.attributes ?? item ?? {};
+
       const pos =
         attr.thumbPos === "top" ||
         attr.thumbPos === "center" ||
@@ -91,12 +105,14 @@ export const getDesignArticles = async (): Promise<Design[]> => {
         subtitle: normalize(attr.subtitle),
         body: Array.isArray(attr.body) ? attr.body : attr.content ?? [],
         slug: attr.slug || `no-slug-${item.id}`,
+
+        /* imágenes */
         thumbPos: pos,
         imageWatermarked: getUrl(attr.imageWatermarked),
         imageThumbTop: getUrl(attr.imageThumbTop),
         imageThumbCenter: getUrl(attr.imageThumbCenter),
         imageThumbBottom: getUrl(attr.imageThumbBottom),
-        imageThumb: getUrl(attr.imageThumb), // legacy fallback
+        imageThumb: getUrl(attr.imageThumb),
         imageFull: getUrl(attr.imageFull),
       };
     });
@@ -106,7 +122,7 @@ export const getDesignArticles = async (): Promise<Design[]> => {
   }
 };
 
-/* --------------------------------------------------------------- utilidades -- */
+/* ───────────────────────────── slugs ───────────────────────────────── */
 export const getDesignSlugs = async (): Promise<string[]> => {
   const articles = await getDesignArticles();
   return articles.map((a) => a.slug);
