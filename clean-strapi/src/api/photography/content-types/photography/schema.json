@@ -1,0 +1,50 @@
+{
+  "kind": "collectionType",
+  "collectionName": "photographies",
+  "info": {
+    "singularName": "photography",
+    "pluralName": "photographies",
+    "displayName": "Photography"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title"
+    },
+    "Category": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::photography-category.photography-category",
+      "inversedBy": "photographies"
+    },
+    "imageFull": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images", "files", "videos", "audios"]
+    },
+    "thumbPos": {
+      "type": "enumeration",
+      "enum": ["top", "center", "bottom"],
+      "default": "center"
+    },
+    "imageWatermarked": {
+      "type": "string"
+    },
+    "imageThumbTop": {
+      "type": "string"
+    },
+    "imageThumbCenter": {
+      "type": "string"
+    },
+    "imageThumbBottom": {
+      "type": "string"
+    }
+  }
+}

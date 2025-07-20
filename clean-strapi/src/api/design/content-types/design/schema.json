@@ -1,0 +1,47 @@
+{
+  "kind": "collectionType",
+  "collectionName": "designs",
+  "info": {
+    "singularName": "design",
+    "pluralName": "designs",
+    "displayName": "Design"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title"
+    },
+    "body": {
+      "type": "blocks"
+    },
+    "thumbPos": {
+      "type": "enumeration",
+      "enum": ["top", "center", "bottom"],
+      "default": "center"
+    },
+    "imageFull": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "imageWatermarked": {
+      "type": "string"
+    },
+    "imageThumbTop": {
+      "type": "string"
+    },
+    "imageThumbCenter": {
+      "type": "string"
+    },
+    "imageThumbBottom": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "kind": "collectionType",
+  "collectionName": "abouts",
+  "info": {
+    "singularName": "about",
+    "pluralName": "abouts",
+    "displayName": "About"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title"
+    },
+    "body": {
+      "type": "blocks"
+    },
+    "imageFull": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"],
+      "pluginOptions": {
+        "upload": {
+          "displayName": "Image"
+        }
+      }
+    },
+    "thumbPos": {
+      "type": "enumeration",
+      "enum": ["top", "center", "bottom"],
+      "default": "center",
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      },
+      "config": {
+        "label": "Thumbnail position"
+      }
+    },
+    "imageWatermarked": {
+      "type": "string"
+    },
+    "imageThumbTop": {
+      "type": "string"
+    },
+    "imageThumbCenter": {
+      "type": "string"
+    },
+    "imageThumbBottom": {
+      "type": "string"
+    }
+  }
+}
