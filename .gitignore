@@ -1,0 +1,46 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Dependency directories
+node_modules/
+.yarn/
+
+# Build & temp
+.cache/
+.tmp/
+build/
+dist/
+out/
+
+# Env files
+.env
+.env.*
+.env.*.local
+
+# Local database (SQLite)
+*.db
+*.sqlite
+
+# Uploads (Strapi)
+public/uploads/
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# Editors/IDEs
+.vscode/
+.idea/
+
+# Vercel / Netlify
+.vercel/
+.netlify/
+
+# Next.js
+.next/
+
+# PM2
+pids/
+*.pid

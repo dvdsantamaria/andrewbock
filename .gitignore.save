@@ -1,0 +1,50 @@
+
+# === General ===
+.DS_Store
+.env
+.env.*.local
+*.log
+*.tgz
+*.gz
+*.zip
+*.bak
+*.tmp
+
+# === Node ===
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# === Next.js (Frontend) ===
+.next/
+out/
+build/
+.cache/
+
+# === Strapi (Backend) ===
+.cache/
+dist/
+public/uploads/
+
+# === VSCode ===
+.vscode/
+
+# === Logs ===
+logs/
+*.log
+*.csv
+
+# === OS/Editor files ===
+Thumbs.db
+.idea/
+*.swp
+
+# === Backup ===
+*.bak
+*.old
+
+# === PM2 process logs ===
+pids/
+*.pid
