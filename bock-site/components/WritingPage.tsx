@@ -52,14 +52,17 @@ export default function WritingPage({
 
   // Construye related para el activo (ya viene initialRelated para intro)
   const related =
-    active === initialActive
-      ? initialRelated
-      : byCategory((active as Article).category)
-          .filter((a) => a.slug !== (active as Article).slug)
+    "slug" in active
+      ? byCategory(active.category)
+          .filter((a) => a.slug !== active.slug)
           .map((a) => ({
             label: a.title,
             href: `/writing/${a.category}/${a.slug}`,
-          }));
+          }))
+      : articles.map((a) => ({
+          label: a.title,
+          href: `/writing/${a.category}/${a.slug}`,
+        }));
 
   // Aplica tema
   useEffect(() => {
