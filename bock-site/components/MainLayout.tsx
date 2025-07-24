@@ -80,7 +80,7 @@ export default function MainLayout({
           </div>
 
           {/* logo */}
-          <div className="col-span-2 flex items-center select-none">
+          <div className="col-span-4 md:col-span-2 flex items-center justify-start md:justify-start select-none">
             <Link href="/" aria-label="Home">
               <Image
                 src="/logo.svg"
@@ -114,9 +114,9 @@ export default function MainLayout({
               );
             })}
           </nav>
-
+          <div className="col-span-4 md:col-span-7" />
           {/* burger mobile */}
-          <div className="col-span-2 md:hidden flex justify-end items-center mt-2">
+          <div className="col-span-4 md:hidden flex justify-end items-center">
             <button
               onClick={() => setMobileMenuOpen((o) => !o)}
               className="p-2 text-[var(--menu-text)]"
