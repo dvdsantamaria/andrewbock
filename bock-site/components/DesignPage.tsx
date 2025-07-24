@@ -106,7 +106,8 @@ export default function DesignSection({
               </div>
             )}
 
-            <article className="col-span-12 md:col-start-3 md:col-span-7 text-black p-6 md:p-10 space-y-6">
+            <article className="col-span-12 md:col-start-3 md:col-span-7 text-black p-6 md:pt-10 md:px-0 space-y-6">
+              {" "}
               {slug && hero && (
                 <img
                   src={hero}
@@ -114,16 +115,13 @@ export default function DesignSection({
                   className="w-full rounded-md border border-gray-300 object-cover"
                 />
               )}
-
               {slug && (
                 <hr className="border-t-4 border-[var(--accent)] my-6 w-1/2" />
               )}
-
               <h1 className="text-3xl font-semibold">{active.title}</h1>
               {"subtitle" in active && active.subtitle && (
                 <p className="italic text-gray-500">{active.subtitle}</p>
               )}
-
               {Array.isArray(active.body)
                 ? active.body.map((block: any, i: number) =>
                     block.type === "paragraph" ? (

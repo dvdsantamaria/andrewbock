@@ -123,9 +123,9 @@ export default function WritingPage({
             <div className="col-span-12 px-4 md:px-8">
               <article
                 className="
-    col-span-12 md:col-start-3 md:col-span-7
-    text-black space-y-6 px-4 md:px-0 pt-4 md:pt-10
-  "
+               col-span-12 md:col-start-3 md:col-span-7
+                text-black space-y-6
+              "
               >
                 <h1 className="text-3xl font-semibold">{active.title}</h1>
                 {"subtitle" in active && active.subtitle && (
