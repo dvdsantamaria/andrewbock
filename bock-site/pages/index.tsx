@@ -6,6 +6,7 @@ import Link from "next/link";
 import MainLayout from "@/components/MainLayout";
 import Footer from "@/components/Footer";
 import TopStrokes from "@/components/TopStrokes";
+import MidStrokes from "@/components/MidStrokes";
 
 /* API helpers */
 import { getAboutArticles } from "@/lib/about";
