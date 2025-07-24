@@ -186,11 +186,12 @@ function ThumbRow({ thumbs }: { thumbs: Thumb[] }) {
   return (
     <>
       {thumbs.map((t, i) => (
-        <div
-          key={t.href}
-          className={`col-span-8 md:col-span-2 ${
-            i === 0 ? "md:col-start-3" : ""
-          } py-4`}
+       <div
+       key={t.href}
+       className={`col-span-12 md:col-span-2 ${
+         i === 0 ? "md:col-start-3" : ""
+       } py-4`}
+     >
         >
           <Link href={t.href} className="block group">
             <img
