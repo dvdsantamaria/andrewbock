@@ -1,3 +1,4 @@
+// components/WritingPage.tsx
 import React, { useEffect } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -99,6 +100,7 @@ export default function WritingPage({
             transition={{ duration: 0.4, ease: "easeInOut" }}
             className="col-span-12 grid grid-cols-12 gap-x-4"
           >
+            {/* dropdown móvil */}
             {related.length > 0 && (
               <div className="col-span-12 md:hidden px-4 pt-4">
                 <details className="border border-gray-300 rounded-md bg-white">
@@ -120,30 +122,32 @@ export default function WritingPage({
                 </details>
               </div>
             )}
-            <div className="col-span-12 px-4 md:px-8">
-              <article className="col-span-12 md:col-start-3 md:col-span-7 text-black p-6 md:pt-10 md:px-0 space-y-6">
-                <h1 className="text-3xl font-semibold">{active.title}</h1>
-                {"subtitle" in active && active.subtitle && (
-                  <p className="italic text-gray-500">{active.subtitle}</p>
-                )}
 
-                {Array.isArray(active.body)
-                  ? active.body.map((block: any, i: number) =>
-                      block.type === "paragraph" ? (
-                        <p key={i}>
-                          {block.children?.map((c: any, j: number) => (
-                            <span key={j}>{c.text}</span>
-                          ))}
-                        </p>
-                      ) : null
-                    )
-                  : typeof active.body === "string"
-                  ? active.body
-                      .split("\n\n")
-                      .map((p: string, i: number) => <p key={i}>{p}</p>)
-                  : null}
-              </article>
-            </div>
+            {/* artículo principal (igual que en DesignPage) */}
+            <article className="col-span-12 md:col-start-3 md:col-span-7 text-black p-6 md:pt-10 md:px-0 space-y-6">
+              <h1 className="text-3xl font-semibold">{active.title}</h1>
+              {"subtitle" in active && active.subtitle && (
+                <p className="italic text-gray-500">{active.subtitle}</p>
+              )}
+
+              {Array.isArray(active.body)
+                ? active.body.map((block: any, i: number) =>
+                    block.type === "paragraph" ? (
+                      <p key={i}>
+                        {block.children?.map((c: any, j: number) => (
+                          <span key={j}>{c.text}</span>
+                        ))}
+                      </p>
+                    ) : null
+                  )
+                : typeof active.body === "string"
+                ? active.body
+                    .split("\n\n")
+                    .map((p: string, i: number) => <p key={i}>{p}</p>)
+                : null}
+            </article>
+
+            {/* aside desktop */}
             {related.length > 0 && (
               <aside className="hidden md:block col-start-10 col-span-2 md:pt-[42px]">
                 <h3
