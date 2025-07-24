@@ -66,7 +66,7 @@ export default function AboutSection({
 
   const thumb = pickThumb(active) || intro.heroImage || null;
 
-  export default function AboutPage(props) {
+  export default function AboutPage(props:any) {
     const isMobile = useMediaQuery({ maxWidth: 767 });
     const subMenuItems = isMobile ? [] : ["", "", ""];
 
