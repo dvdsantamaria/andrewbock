@@ -101,7 +101,7 @@ export default function PhotographyPage({ initialData }: PhotographyPageProps) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4, ease: "easeInOut" }}
-            className="col-span-8 md:col-span-12 grid grid-cols-8 md:grid-cols-12 gap-x-4"
+            className="col-span-12 grid grid-cols-12 gap-x-4"
           >
             {/* Foto grande */}
             <article className="col-span-12 md:col-start-3 md:col-span-7 space-y-6 text-black pt-4 md:pt-10">

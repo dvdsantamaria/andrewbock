@@ -120,35 +120,35 @@ export default function WritingPage({
                 </details>
               </div>
             )}
+            <div className="col-span-12 px-4 md:px-8">
+              <article
+                className="
+    col-span-12 md:col-start-3 md:col-span-7
+    text-black space-y-6 px-4 md:px-0 pt-4 md:pt-10
+  "
+              >
+                <h1 className="text-3xl font-semibold">{active.title}</h1>
+                {"subtitle" in active && active.subtitle && (
+                  <p className="italic text-gray-500">{active.subtitle}</p>
+                )}
 
-            <article
-              className="
-               col-span-12 md:col-start-3 md:col-span-7
-                text-black space-y-6
-              "
-            >
-              <h1 className="text-3xl font-semibold">{active.title}</h1>
-              {"subtitle" in active && active.subtitle && (
-                <p className="italic text-gray-500">{active.subtitle}</p>
-              )}
-
-              {Array.isArray(active.body)
-                ? active.body.map((block: any, i: number) =>
-                    block.type === "paragraph" ? (
-                      <p key={i}>
-                        {block.children?.map((c: any, j: number) => (
-                          <span key={j}>{c.text}</span>
-                        ))}
-                      </p>
-                    ) : null
-                  )
-                : typeof active.body === "string"
-                ? active.body
-                    .split("\n\n")
-                    .map((p: string, i: number) => <p key={i}>{p}</p>)
-                : null}
-            </article>
-
+                {Array.isArray(active.body)
+                  ? active.body.map((block: any, i: number) =>
+                      block.type === "paragraph" ? (
+                        <p key={i}>
+                          {block.children?.map((c: any, j: number) => (
+                            <span key={j}>{c.text}</span>
+                          ))}
+                        </p>
+                      ) : null
+                    )
+                  : typeof active.body === "string"
+                  ? active.body
+                      .split("\n\n")
+                      .map((p: string, i: number) => <p key={i}>{p}</p>)
+                  : null}
+              </article>
+            </div>
             {related.length > 0 && (
               <aside className="hidden md:block col-start-10 col-span-2 md:pt-[42px]">
                 <h3
