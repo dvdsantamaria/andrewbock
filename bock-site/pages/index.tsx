@@ -94,7 +94,7 @@ export default function Home({
 
     /* ABOUT / PUBLICATIONS – ahora a /about/<slug> */
     setPubThumbs(
-      sampleN(aboutData, 3, (p: any) => p.imageThumb || p.imageFull).map(
+      sampleN(aboutData, 1, (p: any) => p.imageThumb || p.imageFull).map(
         (p: any) => ({
           src: normalizeImagePath(p.imageThumb || p.imageFull),
           href: `/about/${p.slug}`, // ← link directo al slug
@@ -196,7 +196,7 @@ function ThumbRow({ thumbs }: { thumbs: Thumb[] }) {
             <img
               src={t.src}
               alt={t.alt}
-              className="w-full aspect-video object-cover border border-gray-300 rounded-md group-hover:border-[var(--accent)] transition"
+              className="w-full aspect-video object-cover border border-gray-300 group-hover:border-[var(--accent)] transition"
             />
           </Link>
         </div>
