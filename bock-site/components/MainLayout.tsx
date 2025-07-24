@@ -52,6 +52,11 @@ export default function MainLayout({
     .filter(Boolean)
     .map((p) => p.toLowerCase());
 
+  const getSubMenuItemsFor = (slug: string) => {
+    if (slug !== currentMain) return [];
+    return subMenuItems;
+  };
+
   /* ─────────── render ─────────── */
   return (
     <div
@@ -153,9 +158,9 @@ export default function MainLayout({
                   </Link>
 
                   {/* sub-items bajo su padre */}
-                  {active && subMenuItems.length > 0 && (
+                  {active && getSubMenuItemsFor(slug).length > 0 && (
                     <nav className="space-y-1 pl-8">
-                      {subMenuItems.map((item) => {
+                      {getSubMenuItemsFor(slug).map((item) => {
                         const subSlug = buildSlug(item);
                         const activeSub = subSlug === currentSub;
                         return (
