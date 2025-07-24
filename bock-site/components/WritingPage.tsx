@@ -36,7 +36,6 @@ export default function WritingPage({
     slug?: string;
   };
 
-  // Decide el artículo activo
   const byCategory = (cat: string) =>
     articles.filter((a) => a.category === cat);
 
@@ -50,10 +49,7 @@ export default function WritingPage({
     active = byCategory(category)[0] ?? initialActive;
   }
 
-  // Construye related para el activo (ya viene initialRelated para intro)
-  // --- RELATED --------------------------------------------------------------
   const related: LinkItem[] = (() => {
-    // 1) estamos en /writing/[category]/[slug]
     if (slug && category) {
       return byCategory(category)
         .filter((a) => a.slug !== slug)
@@ -62,23 +58,18 @@ export default function WritingPage({
           href: `/writing/${a.category}/${a.slug}`,
         }));
     }
-
-    // 2) estamos en /writing/[category]  (sin slug)
     if (category) {
       return byCategory(category).map((a) => ({
         label: a.title,
         href: `/writing/${a.category}/${a.slug}`,
       }));
     }
-
-    // 3) estamos en /writing  (index)  → todo el sitio
     return articles.map((a) => ({
       label: a.title,
       href: `/writing/${a.category}/${a.slug}`,
     }));
   })();
 
-  // Aplica tema
   useEffect(() => {
     const root = document.documentElement;
     Object.entries(theme).forEach(([k, v]) =>
@@ -106,11 +97,10 @@ export default function WritingPage({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4, ease: "easeInOut" }}
-            className="col-span-8 md:col-span-12 grid grid-cols-8 md:grid-cols-12 gap-x-4"
+            className="col-span-12 grid grid-cols-12 gap-x-4"
           >
-            {/* dropdown móvil */}
             {related.length > 0 && (
-              <div className="col-span-8 md:hidden px-4 pt-4">
+              <div className="col-span-12 md:hidden px-4 pt-4">
                 <details className="border border-gray-300 rounded-md bg-white">
                   <summary className="cursor-pointer px-4 py-2 text-sm font-semibold text-[var(--menuText)] hover:text-[var(--accent)]">
                     Explore more
@@ -131,12 +121,9 @@ export default function WritingPage({
               </div>
             )}
 
-            {/* artículo principal */}
             <article
               className="
-                col-start-1 col-span-8
-                md:col-start-1 md:col-span-8 md:py-10 md:pr-10
-                lg:col-start-3 lg:col-span-7
+               col-span-12 md:col-start-3 md:col-span-7
                 text-black space-y-6
               "
             >
@@ -162,7 +149,6 @@ export default function WritingPage({
                 : null}
             </article>
 
-            {/* aside desktop */}
             {related.length > 0 && (
               <aside className="hidden md:block col-start-10 col-span-2 md:pt-[42px]">
                 <h3
