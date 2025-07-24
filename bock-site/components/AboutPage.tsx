@@ -9,7 +9,6 @@ import Link from "next/link";
 import { Article, Intro } from "@/lib/about";
 import { useMediaQuery } from "react-responsive";
 
-
 /* ---------- tema local ---------- */
 const theme: Record<string, string> = {
   background: "#A7A9AC",
@@ -34,7 +33,7 @@ const pickThumb = (a: Partial<Article & Intro>): string | null => {
   return (a as any)[key] ?? null;
 };
 
-export default function AboutSection({
+export default function AboutPage({
   initialData,
   initialSlug,
 }: AboutSectionProps) {
@@ -42,22 +41,13 @@ export default function AboutSection({
   const slug = (initialSlug ?? query.slug) as string | undefined;
   const { intro, articles } = initialData;
 
-  /* ---------- set CSS vars ---------- */
-  useEffect(() => {
-    const root = document.documentElement;
-    Object.entries(theme).forEach(([k, v]) =>
-      root.style.setProperty(`--${k}`, v)
-    );
-    return () =>
-      Object.keys(theme).forEach((k) => root.style.removeProperty(`--${k}`));
-  }, []);
+  const isMobile = useMediaQuery({ maxWidth: 767 });
+  const subMenuItems = isMobile ? [] : ["", "", ""];
 
-  /* ---------- qué artículo se muestra ---------- */
   const active = slug ? articles.find((a) => a.slug === slug) ?? intro : intro;
   const related =
     active === intro ? articles : articles.filter((a) => a.slug !== slug);
 
-  /* ---------- URLs de imagen ---------- */
   const hero =
     ("imageWatermarked" in active && active.imageWatermarked) ||
     ("imageFull" in active && active.imageFull) ||
@@ -66,18 +56,21 @@ export default function AboutSection({
 
   const thumb = pickThumb(active) || intro.heroImage || null;
 
-  export default function AboutPage(props:any) {
-    const isMobile = useMediaQuery({ maxWidth: 767 });
-    const subMenuItems = isMobile ? [] : ["", "", ""];
-
+  useEffect(() => {
+    const root = document.documentElement;
+    Object.entries(theme).forEach(([k, v]) =>
+      root.style.setProperty(`--${k}`, v)
+    );
+    return () =>
+      Object.keys(theme).forEach((k) => root.style.removeProperty(`--${k}`));
+  }, []);
   return (
     <>
       <Head>
         <title>{active.title || "About"}</title>
       </Head>
 
-      <MainLayout section="about"       subMenuItems={subMenuItems}
- theme={theme}>
+      <MainLayout section="about" subMenuItems={subMenuItems} theme={theme}>
         <AnimatePresence mode="wait">
           <motion.div
             key={slug ?? "about-intro"}
