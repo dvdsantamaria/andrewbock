@@ -82,7 +82,7 @@ export default function DesignSection({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4, ease: "easeInOut" }}
-            className="col-span-12 grid grid-cols-12 gap-x-4"
+            className="col-span-8 md:col-span-12 grid grid-cols-8 md:grid-cols-12 gap-x-4"
           >
             {related.length > 0 && (
               <div className="col-span-8 md:hidden px-4 pt-4">
@@ -106,7 +106,7 @@ export default function DesignSection({
               </div>
             )}
 
-            <article className="col-start-1 md:col-start-3 col-span-8 md:col-span-7 text-black p-6 md:p-10 space-y-6">
+            <article className="col-span-12 md:col-start-3 md:col-span-7 text-black p-6 md:p-10 space-y-6">
               {slug && hero && (
                 <img
                   src={hero}
