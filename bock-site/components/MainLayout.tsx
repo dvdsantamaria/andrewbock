@@ -71,16 +71,10 @@ export default function MainLayout({
       <div className="mx-auto w-full max-w-[940px] lg:max-w-screen-xl px-4 grid grid-cols-8 md:grid-cols-12">
         {/* ══ HEADER ═══════════════════════════════════ */}
         <header className="col-span-12 grid grid-cols-12 items-center min-h-[108px]">
-          {/* mini-strokes */}
-          <div className="col-span-12 relative h-[7px] grid grid-cols-12 gap-x-4">
-            <div className="col-start-1 w-[7px] h-full bg-[var(--accent)]" />
-            <div className="col-start-5 w-[7px] h-full bg-[var(--accent)]" />
-            <div className="col-start-7 w-[7px] h-full bg-[var(--accent)]" />
-            <div className="absolute right-0 top-0 w-[7px] h-full bg-[var(--accent)]" />
-          </div>
+          {/* mini-strokes arriba se mantienen iguales */}
 
           {/* logo */}
-          <div className="col-span-4 md:col-span-2 flex items-center justify-start md:justify-start select-none">
+          <div className="col-span-4 md:col-span-2 flex items-center select-none">
             <Link href="/" aria-label="Home">
               <Image
                 src="/logo.svg"
@@ -92,10 +86,11 @@ export default function MainLayout({
             </Link>
           </div>
 
-          <div className="col-span-7" />
+          {/* espacio central opcional */}
+          <div className="hidden md:block md:col-span-7" />
 
           {/* menú desktop */}
-          <nav className="col-start-10 col-span-2 hidden md:flex flex-col space-y-1 text-xs uppercase tracking-wide my-2">
+          <nav className="hidden md:flex md:col-start-10 md:col-span-2 flex-col space-y-1 text-xs uppercase tracking-wide my-2">
             {TOP_MENU.map((label) => {
               const slug = buildSlug(label);
               const active = slug === currentMain;
@@ -114,9 +109,9 @@ export default function MainLayout({
               );
             })}
           </nav>
-          <div className="col-span-4 md:col-span-7" />
+
           {/* burger mobile */}
-          <div className="col-span-4 md:hidden flex justify-end items-center">
+          <div className="col-span-8 md:hidden flex justify-end items-center">
             <button
               onClick={() => setMobileMenuOpen((o) => !o)}
               className="p-2 text-[var(--menu-text)]"
@@ -126,7 +121,6 @@ export default function MainLayout({
             </button>
           </div>
         </header>
-
         {/* ══ MENÚ MOBILE ═════════════════════════════ */}
         {mobileMenuOpen && (
           <div className="md:hidden col-span-12 bg-[var(--background)] border-y border-[var(--accent)] py-4 px-4 space-y-3 text-base uppercase tracking-wide">
