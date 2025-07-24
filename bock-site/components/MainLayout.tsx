@@ -111,10 +111,10 @@ export default function MainLayout({
           </nav>
 
           {/* burger mobile */}
-          <div className="col-span-8 md:hidden flex justify-end items-center">
+          <div className="col-span-8 md:hidden flex justify-end items-center pr-4">
             <button
               onClick={() => setMobileMenuOpen((o) => !o)}
-              className="p-2 text-[var(--menu-text)]"
+              className="text-[28px] p-2 text-[var(--menu-text)]"
               aria-label="Toggle menu"
             >
               ☰
