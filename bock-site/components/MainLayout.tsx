@@ -153,28 +153,31 @@ export default function MainLayout({
                   </Link>
 
                   {/* sub-items bajo su padre */}
-                  {active && subMenuItems.length > 0 && (
-                    <nav className="space-y-1 pl-8">
-                      {subMenuItems.map((item) => {
-                        const subSlug = buildSlug(item);
-                        const activeSub = subSlug === currentSub;
-                        return (
-                          <Link
-                            key={subSlug}
-                            href={`/${slug}/${subSlug}`}
-                            onClick={() => setMobileMenuOpen(false)}
-                            className={`block py-1 text-sm ${
-                              activeSub
-                                ? "font-semibold text-[var(--accent)]"
-                                : "text-[var(--menu-text)] hover:text-[var(--accent)]"
-                            }`}
-                          >
-                            {item}
-                          </Link>
-                        );
-                      })}
-                    </nav>
-                  )}
+                  {active &&
+                    (subMenuItems.length > 0 ? (
+                      <nav className="space-y-1 pl-8">
+                        {subMenuItems.map((item) => {
+                          const subSlug = buildSlug(item);
+                          const activeSub = subSlug === currentSub;
+                          return (
+                            <Link
+                              key={subSlug}
+                              href={`/${slug}/${subSlug}`}
+                              onClick={() => setMobileMenuOpen(false)}
+                              className={`block py-1 text-sm ${
+                                activeSub
+                                  ? "font-semibold text-[var(--accent)]"
+                                  : "text-[var(--menu-text)] hover:text-[var(--accent)]"
+                              }`}
+                            >
+                              {item}
+                            </Link>
+                          );
+                        })}
+                      </nav>
+                    ) : (
+                      <div className="pl-8 py-1" /> // mismo padding que los subitems
+                    ))}
                 </React.Fragment>
               );
             })}
