@@ -125,26 +125,22 @@ export default function Home({
             ))}
           </ul>
 
+          <div className="col-span-full my-4">
+            <MidStrokes />
+          </div>
           {/* PHOTOGRAPHY */}
           <SectionHeading title="Photography" />
           <ThumbRow thumbs={photoThumbs} />
-          <div className="relative h-[7px] grid grid-cols-12 gap-x-4">
-            <div className="col-start-1  col-span-2  bg-[var(--accent)] h-full" />
-            <div className="col-start-3  col-span-8  bg-[var(--accent)] h-full" />
-            <div className="col-start-11 col-span-1 bg-[var(--accent)] h-full" />
-            <div className="absolute right-0 top-0 w-[7px] h-full bg-[var(--accent)]" />
-          </div>
 
+          <div className="col-span-full my-4">
+            <MidStrokes />
+          </div>
           {/* DESIGN */}
           <SectionHeading title="Design" />
           <ThumbRow thumbs={designThumbs} />
-          <div className="relative h-[7px] grid grid-cols-12 gap-x-4">
-            <div className="col-start-1  col-span-2  bg-[var(--accent)] h-full" />
-            <div className="col-start-3  col-span-8  bg-[var(--accent)] h-full" />
-            <div className="col-start-11 col-span-1 bg-[var(--accent)] h-full" />
-            <div className="absolute right-0 top-0 w-[7px] h-full bg-[var(--accent)]" />
+          <div className="col-span-full my-4">
+            <MidStrokes />
           </div>
-
           {/* ABOUT */}
           <SectionHeading title="About" />
           <ThumbRow thumbs={pubThumbs} />
