@@ -78,7 +78,7 @@ export default function AboutPage({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4, ease: "easeInOut" }}
-            className="col-span-8 md:col-span-12 grid grid-cols-8 md:grid-cols-12 gap-x-4"
+            className="col-span-12 grid grid-cols-12 gap-x-4"
           >
             {/* ► Thumb SOLO en la intro (sin slug) */}
             {!slug && thumb && (
