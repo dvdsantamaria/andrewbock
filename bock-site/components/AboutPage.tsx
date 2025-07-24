@@ -116,7 +116,7 @@ export default function AboutPage({
             )}
 
             {/* ► main article */}
-            <article className="col-span-12 md:col-start-3 md:col-span-7 text-black p-6 md:p-10 space-y-6">
+            <article className="col-span-12 md:col-start-3 md:col-span-7 text-black p-6 md:pt-10 md:px-0 space-y-6">
               {slug && hero && (
                 <img
                   src={hero}

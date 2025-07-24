@@ -104,7 +104,7 @@ export default function PhotographyPage({ initialData }: PhotographyPageProps) {
             className="col-span-12 grid grid-cols-12 gap-x-4"
           >
             {/* Foto grande */}
-            <article className="col-span-12 md:col-start-3 md:col-span-7 space-y-6 text-black pt-4 md:pt-10">
+            <article className="col-span-12 md:col-start-3 md:col-span-7 text-black p-6 md:pt-10 md:px-0 space-y-6">
               {active.imageFull && (
                 <img
                   src={active.imageFull}
