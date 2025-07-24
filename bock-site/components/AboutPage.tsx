@@ -7,6 +7,8 @@ import Footer from "@/components/Footer";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { Article, Intro } from "@/lib/about";
+import { useMediaQuery } from "react-responsive";
+
 
 /* ---------- tema local ---------- */
 const theme: Record<string, string> = {
@@ -64,13 +66,18 @@ export default function AboutSection({
 
   const thumb = pickThumb(active) || intro.heroImage || null;
 
+  export default function AboutPage(props) {
+    const isMobile = useMediaQuery({ maxWidth: 767 });
+    const subMenuItems = isMobile ? [] : ["", "", ""];
+
   return (
     <>
       <Head>
         <title>{active.title || "About"}</title>
       </Head>
 
-      <MainLayout section="about" subMenuItems={["", "", ""]} theme={theme}>
+      <MainLayout section="about"       subMenuItems={subMenuItems}
+ theme={theme}>
         <AnimatePresence mode="wait">
           <motion.div
             key={slug ?? "about-intro"}
