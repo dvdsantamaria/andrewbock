@@ -113,7 +113,7 @@ export default function Home({
       <MainLayout section="" subMenuItems={[]} theme={{}}>
         <TopStrokes />
 
-        <div className="col-span-8 md:col-span-12 grid grid-cols-8 md:grid-cols-12 gap-x-4">
+        <div className="col-span-8 md:col-span-12 grid grid-cols-12 md:grid-cols-12 gap-x-4">
           {/* WRITING */}
           <SectionHeading title="Writing" />
           <ul className="col-span-8 md:col-span-10 md:col-start-3 space-y-1 text-[17px] leading-snug mt-8">
