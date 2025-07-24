@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import type { Intro, Design } from "@/lib/design";
+import { useMediaQuery } from "react-responsive";
 
 /* ---------- tema local ---------- */
 const theme: Record<string, string> = {
@@ -51,6 +52,9 @@ export default function DesignSection({
       Object.keys(theme).forEach((k) => root.style.removeProperty(`--${k}`));
   }, []);
 
+  const isMobile = useMediaQuery({ maxWidth: 767 });
+  const subMenuItems = isMobile ? [] : ["", "", ""];
+
   const active = slug ? articles.find((a) => a.slug === slug) ?? intro : intro;
 
   const related =
@@ -70,7 +74,7 @@ export default function DesignSection({
         <title>{active.title || "Design"}</title>
       </Head>
 
-      <MainLayout section="design" subMenuItems={["", "", ""]} theme={theme}>
+      <MainLayout section="design" subMenuItems={subMenuItems} theme={theme}>
         <AnimatePresence mode="wait">
           <motion.div
             key={slug ?? "design-intro"}
