@@ -100,7 +100,7 @@ export default function MainLayout({
           <div className="hidden md:block md:col-span-7" />
 
           {/* menú desktop */}
-          <nav className="hidden md:flex md:col-start-10 md:col-span-2 flex-col space-y-1 text-xs uppercase tracking-wide my-2">
+          <nav className="hidden md:flex md:col-start-10 md:col-span-2 flex-col space-y-1 text-xs uppercase tracking-wide my-2 px-4">
             {TOP_MENU.map((label) => {
               const slug = buildSlug(label);
               const active = slug === currentMain;
@@ -193,7 +193,7 @@ export default function MainLayout({
 
         {/* ══ SUB-MENÚ DESKTOP (strokes) ═════════════ */}
         {(section || subMenuItems.length > 0) && (
-          <div className="col-span-12 grid grid-cols-12 grid-rows-[6px_auto_6px] gap-x-0 text-xs tracking-wider relative">
+          <div className="col-span-12 grid grid-cols-12 grid-rows-[6px_auto_6px] gap-x-4 text-xs tracking-wider relative">
             {[
               { label: section, isSection: true },
               ...subMenuItems.map((l) => ({ label: l, isSection: false })),
@@ -246,8 +246,8 @@ export default function MainLayout({
             })}
 
             {/* stroke continuo */}
-            <div className="hidden lg:block row-start-1 col-start-10 col-span-3 h-[7px] bg-[var(--accent)]" />
-            <div className="hidden lg:block row-start-3 col-start-10 col-span-3 h-[3px] bg-[var(--accent)]" />
+            <div className="hidden lg:block row-start-1 col-start-10 col-span-2 h-[7px] bg-[var(--accent)]" />
+            <div className="hidden lg:block row-start-3 col-start-10 col-span-2 h-[3px] bg-[var(--accent)]" />
 
             <div className="absolute right-0 top-0 w-[7px] h-[7px] bg-[var(--accent)]" />
             <div className="absolute right-0 bottom-0 w-[7px] h-[3px] bg-[var(--accent)]" />
