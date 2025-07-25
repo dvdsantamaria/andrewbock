@@ -118,7 +118,7 @@ export default function PhotographyPage({ initialData }: PhotographyPageProps) {
             </article>
 
             {/* Tira de thumbs */}
-            <div className="col-span-8 lg:col-start-3 lg:col-span-7 pt-6">
+            <div className="col-span-12 lg:col-start-3 lg:col-span-7 pt-6">
               <ul className="flex overflow-x-auto gap-4 pb-2 scrollbar-hide">
                 {thumbs.map((t) => (
                   <li key={t.id} className="shrink-0 w-40">
