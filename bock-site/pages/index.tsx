@@ -196,7 +196,7 @@ function ThumbRow({ thumbs }: { thumbs: Thumb[] }) {
             <img
               src={t.src}
               alt={t.alt}
-              className="w-full aspect-[3/2] object-cover border border-gray-300 group-hover:border-[var(--accent)] transition px-4"
+              className="aspect-[3/2] max-w-[90%] mx-auto object-cover border border-gray-300 group-hover:border-[var(--accent)] transition"
             />
           </Link>
         </div>
