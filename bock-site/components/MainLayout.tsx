@@ -76,8 +76,13 @@ export default function MainLayout({
       <div className="mx-auto w-full max-w-[940px] lg:max-w-screen-xl px-4 grid grid-cols-8 md:grid-cols-12">
         {/* ══ HEADER ═══════════════════════════════════ */}
         <header className="col-span-12 grid grid-cols-12 items-center min-h-[108px]">
-          {/* mini-strokes arriba se mantienen iguales */}
-
+          {/* mini-strokes */}
+          <div className="col-span-12 relative h-[7px] grid grid-cols-12 gap-x-4">
+            <div className="col-start-1 w-[7px] h-full bg-[var(--accent)]" />
+            <div className="col-start-5 w-[7px] h-full bg-[var(--accent)]" />
+            <div className="col-start-7 w-[7px] h-full bg-[var(--accent)]" />
+            <div className="absolute right-0 top-0 w-[7px] h-full bg-[var(--accent)]" />
+          </div>
           {/* logo */}
           <div className="col-span-4 md:col-span-2 flex items-center select-none">
             <Link href="/" aria-label="Home">
