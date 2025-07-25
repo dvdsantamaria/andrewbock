@@ -246,10 +246,7 @@ export default function MainLayout({
             })}
 
             {/* stroke continuo */}
-            <div className="hidden lg:block row-start-1 col-start-9 col-span-3 h-[7px] bg-[var(--accent)]" />
-            <div className="hidden lg:block row-start-3 col-start-9 col-span-3 h-[3px] bg-[var(--accent)]" />
 
-            <div className="absolute right-0 top-0 w-[7px] h-[7px] bg-[var(--accent)]" />
             <div className="absolute right-0 bottom-0 w-[7px] h-[3px] bg-[var(--accent)]" />
           </div>
         )}
