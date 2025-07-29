@@ -109,7 +109,8 @@ export default function Home({
           {/* WRITING */}
           <SectionHeading title="Writing" />
 
-          <ul className="col-span-12 md:hidden space-y-2 text-[19px] leading-relaxed mt-4 mb-6 pl-6">
+          {/* Mobile list */}
+          <ul className="col-span-12 md:hidden space-y-3 text-[19px] leading-relaxed mt-6 mb-8 px-6">
             {writingLinks.map((l) => (
               <li key={l.href}>
                 <Link href={l.href} className="hover:text-[var(--accent)]">
@@ -119,6 +120,7 @@ export default function Home({
             ))}
           </ul>
 
+          {/* Desktop marquee */}
           <div className="hidden md:flex col-span-10 md:col-start-3 md:min-h-[160px] items-center">
             <div className="relative w-full overflow-hidden">
               <div className="pointer-events-none absolute left-0 top-0 h-full w-16 bg-gradient-to-r from-[var(--background)] to-transparent" />
@@ -228,9 +230,9 @@ function SectionHeading({
 }) {
   return (
     <h2
-      className={`col-span-12 md:col-span-2 md:col-start-1 pl-[5%] md:pl-0 italic text-2xl md:text-3xl flex items-center md:min-h-[160px] ${
-        offsetUp ? "md:-mt-10" : ""
-      }`}
+      className={`col-span-12 md:col-span-2 md:col-start-1 italic text-2xl md:text-3xl flex items-center md:min-h-[160px]
+      px-6 md:px-0 mt-6 mb-2 md:mt-0 md:mb-0
+      ${offsetUp ? "md:-mt-12" : ""}`}
       style={{
         fontFamily: `"Palatino Linotype","Book Antiqua",Palatino,serif`,
       }}
@@ -254,15 +256,14 @@ function ThumbRow({
           key={t.href}
           className={`col-span-12 md:col-span-2 ${
             i === 0 ? "md:col-start-3" : ""
-          } md:flex md:items-center md:min-h-[160px] ${
-            offsetUp ? "md:-mt-10" : ""
-          }`}
+          } md:flex md:items-center md:min-h-[160px]
+          px-6 md:px-0 py-4 md:py-0 ${offsetUp ? "md:-mt-12" : ""}`}
         >
           <Link href={t.href} className="block group w-full">
             <img
               src={t.src}
               alt={t.alt}
-              className="aspect-[3/2] max-w-[75%] mx-auto object-cover border border-gray-300 group-hover:border-[var(--accent)] transition"
+              className="aspect-[3/2] max-w-[90%] md:max-w-[75%] mx-auto object-cover border border-gray-300 group-hover:border-[var(--accent)] transition"
             />
           </Link>
         </div>
