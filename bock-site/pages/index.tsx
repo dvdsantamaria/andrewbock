@@ -52,7 +52,6 @@ export default function Home({
   const [pubThumbs, setPubThumbs] = useState<Thumb[]>([]);
 
   useEffect(() => {
-    /* PHOTOGRAPHY */
     setPhotoThumbs(
       sampleN(
         photoData,
@@ -67,7 +66,6 @@ export default function Home({
       }))
     );
 
-    /* DESIGN */
     setDesignThumbs(
       sampleN(
         designData,
@@ -91,7 +89,6 @@ export default function Home({
       })
     );
 
-    /* ABOUT / PUBLICATIONS */
     setPubThumbs(
       sampleN(aboutData, 1, (p: any) => p.imageThumb || p.imageFull).map(
         (p: any) => ({
@@ -115,7 +112,7 @@ export default function Home({
         <div className="col-span-12 grid grid-cols-12 gap-x-4">
           {/* WRITING */}
           <SectionHeading title="Writing" />
-          {/* Mobile list (kept as is) */}
+          {/* Mobile list (unchanged) */}
           <ul className="col-span-12 md:hidden space-y-1 text-[18px] leading-snug mt-2 pl-[5%]">
             {writingLinks.map((l) => (
               <li key={l.href}>
@@ -126,8 +123,8 @@ export default function Home({
             ))}
           </ul>
 
-          {/* Desktop marquee */}
-          <div className="hidden md:block col-span-10 md:col-start-3 md:min-h-[280px] flex items-center">
+          {/* Desktop marquee centered */}
+          <div className="hidden md:flex col-span-10 md:col-start-3 md:min-h-[200px] items-center">
             <div className="relative w-full overflow-hidden">
               <div className="pointer-events-none absolute left-0 top-0 h-full w-16 bg-gradient-to-r from-[var(--background)] to-transparent" />
               <div className="pointer-events-none absolute right-0 top-0 h-full w-16 bg-gradient-to-l from-[var(--background)] to-transparent" />
@@ -137,7 +134,7 @@ export default function Home({
                     <Link
                       key={l.href}
                       href={l.href}
-                      className="hover:text-[var(--accent)] text-[20px] md:text-[22px] leading-snug"
+                      className="hover:text-[var(--accent)] text-[20px] leading-snug"
                     >
                       {l.label}
                     </Link>
@@ -151,7 +148,7 @@ export default function Home({
                     <span key={`${l.href}-dup-${i}`}>
                       <Link
                         href={l.href}
-                        className="hover:text-[var(--accent)] text-[20px] md:text-[22px] leading-snug"
+                        className="hover:text-[var(--accent)] text-[20px] leading-snug"
                       >
                         {l.label}
                       </Link>
@@ -182,15 +179,14 @@ export default function Home({
             <MidStrokes />
           </div>
 
-          {/* ABOUT */}
-          <SectionHeading title="About" />
-          <ThumbRow thumbs={pubThumbs} />
+          {/* ABOUT (compact height to offset footer mt-12) */}
+          <SectionHeading title="About" compact />
+          <ThumbRow thumbs={pubThumbs} compact />
 
           <Footer />
         </div>
       </MainLayout>
 
-      {/* minimal CSS for marquee */}
       <style jsx>{`
         .marquee {
           display: flex;
@@ -214,7 +210,7 @@ export default function Home({
   );
 }
 
-/* SSG */
+/* getStaticProps */
 export async function getStaticProps() {
   const [writingData, photoData, designData, aboutData] = await Promise.all([
     getWritingArticles(),
@@ -230,10 +226,18 @@ export async function getStaticProps() {
 }
 
 /* UI helpers */
-function SectionHeading({ title }: { title: string }) {
+function SectionHeading({
+  title,
+  compact = false,
+}: {
+  title: string;
+  compact?: boolean;
+}) {
   return (
     <h2
-      className="col-span-12 md:col-span-2 md:col-start-1 py-8 md:py-0 md:min-h-[280px] italic text-2xl md:text-3xl pl-[5%] md:pl-0 flex items-center"
+      className={`col-span-12 md:col-span-2 md:col-start-1 pl-[5%] md:pl-0 italic text-2xl md:text-3xl flex items-center ${
+        compact ? "md:min-h-[152px]" : "md:min-h-[200px]"
+      }`}
       style={{
         fontFamily: `"Palatino Linotype","Book Antiqua",Palatino,serif`,
       }}
@@ -243,7 +247,13 @@ function SectionHeading({ title }: { title: string }) {
   );
 }
 
-function ThumbRow({ thumbs }: { thumbs: Thumb[] }) {
+function ThumbRow({
+  thumbs,
+  compact = false,
+}: {
+  thumbs: Thumb[];
+  compact?: boolean;
+}) {
   return (
     <>
       {thumbs.map((t, i) => (
@@ -251,7 +261,9 @@ function ThumbRow({ thumbs }: { thumbs: Thumb[] }) {
           key={t.href}
           className={`col-span-12 md:col-span-2 ${
             i === 0 ? "md:col-start-3" : ""
-          } py-6 md:py-0 md:min-h-[280px] flex items-center`}
+          } md:flex md:items-center ${
+            compact ? "md:min-h-[152px]" : "md:min-h-[200px]"
+          } py-6 md:py-0`}
         >
           <Link href={t.href} className="block group w-full">
             <img
