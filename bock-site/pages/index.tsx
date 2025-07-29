@@ -177,8 +177,8 @@ export default function Home({
           </div>
 
           {/* ABOUT (centrado fino) */}
-          <SectionHeading title="About" offsetUp />
-          <ThumbRow thumbs={pubThumbs} offsetUp />
+          <SectionHeading title="About" footerCompensate />
+          <ThumbRow thumbs={pubThumbs} footerCompensate />
 
           <Footer />
         </div>
@@ -224,16 +224,16 @@ export async function getStaticProps() {
 /* UI helpers */
 function SectionHeading({
   title,
-  offsetUp = false,
+  footerCompensate = false,
 }: {
   title: string;
-  offsetUp?: boolean;
+  footerCompensate?: boolean;
 }) {
   return (
     <h2
-      className={`col-span-12 md:col-span-2 md:col-start-1 italic text-2xl md:text-3xl flex items-center md:min-h-[160px]
-      px-6 md:px-0 mt-8 mb-3 md:mt-0 md:mb-0
-      ${offsetUp ? "md:-mt-12" : ""}`}
+      className={`col-span-12 md:col-span-2 md:col-start-1 italic text-2xl md:text-3xl
+      flex items-center md:min-h-[160px] px-6 md:px-0 mt-8 mb-3 md:mt-0 md:mb-0
+      ${footerCompensate ? "md:translate-y-6" : ""}`}
       style={{
         fontFamily: `"Palatino Linotype","Book Antiqua",Palatino,serif`,
       }}
@@ -245,10 +245,10 @@ function SectionHeading({
 
 function ThumbRow({
   thumbs,
-  offsetUp = false,
+  footerCompensate = false,
 }: {
   thumbs: Thumb[];
-  offsetUp?: boolean;
+  footerCompensate?: boolean;
 }) {
   return (
     <>
@@ -257,14 +257,16 @@ function ThumbRow({
           key={t.href}
           className={`col-span-12 md:col-span-2 ${
             i === 0 ? "md:col-start-3" : ""
-          } md:flex md:items-center md:min-h-[160px]
-          px-6 md:px-0 py-4 md:py-0 ${offsetUp ? "md:-mt-12" : ""}`}
+          }
+          md:flex md:items-center md:min-h-[160px] px-6 md:px-0 py-4 md:py-0
+          ${footerCompensate ? "md:translate-y-6" : ""}`}
         >
           <Link href={t.href} className="block group w-full">
             <img
               src={t.src}
               alt={t.alt}
-              className="aspect-[3/2] max-w-[90%] md:max-w-[75%] mx-auto my-2 object-cover border border-gray-300 group-hover:border-[var(--accent)] transition"
+              className="aspect-[3/2] max-w-[90%] md:max-w-[75%] mx-auto my-2 object-cover
+              border border-gray-300 group-hover:border-[var(--accent)] transition"
             />
           </Link>
         </div>
