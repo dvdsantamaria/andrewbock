@@ -40,11 +40,8 @@ export default function MainLayout({
   } = theme;
 
   /* helpers */
-  const TOP_MENU = ["Writing", "Media Design", "Photography", "About"];
-  const buildSlug = (s: string) =>
-    s.toLowerCase() === "media design"
-      ? "design"
-      : s.toLowerCase().replace(/\s+/g, "-");
+  const TOP_MENU = ["Writing", "Design", "Photography", "About"];  const buildSlug = (s: string) =>
+    const buildSlug = (s: string) => s.toLowerCase().replace(/\s+/g, "-");
 
   const router = useRouter();
   const [currentMain, currentSub] = router.asPath
@@ -191,72 +188,70 @@ export default function MainLayout({
           </div>
         )}
 
-        {/* ══ SUB-MENÚ DESKTOP (strokes) ═════════════ */}
-        {(section || subMenuItems.length > 0) && (
-          <div className="col-span-12 grid grid-cols-12 grid-rows-[6px_auto_6px] gap-x-4 text-xs tracking-wider relative">
-            {[
-              { label: section, isSection: true },
-              ...subMenuItems.map((l) => ({ label: l, isSection: false })),
-            ].map((item, i) => {
-              const start = i * 2 + 1;
-              const base =
-                "row-start-2 px-2 py-[6px] whitespace-nowrap flex items-center";
-              return (
-                <React.Fragment key={i}>
-                  <div
-                    className="row-start-1 col-span-2 h-[7px] bg-[var(--accent)]"
-                    style={{ gridColumnStart: start }}
-                  />
-                  <div
-                    className="row-start-3 col-span-2 h-[3px] bg-[var(--accent)]"
-                    style={{ gridColumnStart: start }}
-                  />
+     {/* ══ SUB-MENÚ (strokes) ═════════════ */}
+{(section || subMenuItems.length > 0) && (
+  <div className="col-span-12 grid grid-cols-12 grid-rows-[6px_auto_6px] gap-x-4 text-xs tracking-wider relative">
+    {/* Mobile: líneas continuas a 12 columnas */}
+    <div className="md:hidden row-start-1 col-span-12 h-[7px] bg-[var(--accent)]" />
+    <div className="md:hidden row-start-3 col-span-12 h-[3px] bg-[var(--accent)]" />
 
-                  {item.isSection ? (
-                    <h2
-                      className={`col-span-12 md:col-span-2 ${base}`}
-                      style={{
-                        gridColumnStart: start,
-                        fontFamily: `"Palatino Linotype","Book Antiqua",Palatino,serif`,
-                        fontStyle: "italic",
-                        fontSize: "1.5rem",
-                        color: sectionColor,
-                        paddingLeft: "10px",
-                        textTransform: "capitalize",
-                      }}
-                    >
-                      {item.label}
-                    </h2>
-                  ) : (
-                    <Link
-                      href={`/${currentMain}/${buildSlug(item.label)}`}
-                      className={`hidden md:flex col-span-2 ${base} font-bold uppercase hover:text-[var(--accent)]`}
-                      style={{
-                        gridColumnStart: start,
-                        fontFamily: `"Palatino Linotype","Book Antiqua",Palatino,serif`,
-                        fontSize: ".8rem",
-                        color: "var(--menu-text)",
-                      }}
-                    >
-                      {item.label}
-                    </Link>
-                  )}
-                </React.Fragment>
-              );
-            })}
+    {[
+      { label: section, isSection: true },
+      ...subMenuItems.map((l) => ({ label: l, isSection: false })),
+    ].map((item, i) => {
+      const start = i * 2 + 1;
+      const base =
+        "row-start-2 px-2 py-[6px] whitespace-nowrap flex items-center";
+      return (
+        <React.Fragment key={i}>
+          {/* Desktop: barras segmentadas (ocultas en mobile) */}
+          <div
+            className="hidden md:block row-start-1 col-span-2 h-[7px] bg-[var(--accent)]"
+            style={{ gridColumnStart: start }}
+          />
+          <div
+            className="hidden md:block row-start-3 col-span-2 h-[3px] bg-[var(--accent)]"
+            style={{ gridColumnStart: start }}
+          />
 
-            {/* stroke continuo */}
-            <div className="hidden lg:block row-start-1 col-start-10 col-span-2 h-[7px] bg-[var(--accent)]" />
-            <div className="hidden lg:block row-start-3 col-start-10 col-span-2 h-[3px] bg-[var(--accent)]" />
+          {item.isSection ? (
+            <h2
+              className={`col-span-12 md:col-span-2 ${base}`}
+              style={{
+                gridColumnStart: start,
+                fontFamily: `"Palatino Linotype","Book Antiqua",Palatino,serif`,
+                fontStyle: "italic",
+                fontSize: "1.5rem",
+                color: sectionColor,
+                paddingLeft: "10px",
+                textTransform: "capitalize",
+              }}
+            >
+              {item.label}
+            </h2>
+          ) : (
+            <Link
+              href={`/${currentMain}/${buildSlug(item.label)}`}
+              className={`hidden md:flex col-span-2 ${base} font-bold uppercase hover:text-[var(--accent)]`}
+              style={{
+                gridColumnStart: start,
+                fontFamily: `"Palatino Linotype","Book Antiqua",Palatino,serif`,
+                fontSize: ".8rem",
+                color: "var(--menu-text)",
+              }}
+            >
+              {item.label}
+            </Link>
+          )}
+        </React.Fragment>
+      );
+    })}
 
-            <div className="absolute right-0 top-0 w-[7px] h-[7px] bg-[var(--accent)]" />
-            <div className="absolute right-0 bottom-0 w-[7px] h-[3px] bg-[var(--accent)]" />
-          </div>
-        )}
+    {/* strokes de la derecha: solo desktop como estaban */}
+    <div className="hidden lg:block row-start-1 col-start-10 col-span-2 h-[7px] bg-[var(--accent)]" />
+    <div className="hidden lg:block row-start-3 col-start-10 col-span-2 h-[3px] bg-[var(--accent)]" />
 
-        {/* ══ MAIN ════════════════════════════════════ */}
-        <main className="col-span-8 md:col-span-12">{children}</main>
-      </div>
-    </div>
-  );
-}
+    <div className="absolute right-0 top-0 w-[7px] h-[7px] bg-[var(--accent)]" />
+    <div className="absolute right-0 bottom-0 w-[7px] h-[3px] bg-[var(--accent)]" />
+  </div>
+)}

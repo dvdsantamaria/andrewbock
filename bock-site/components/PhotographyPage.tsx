@@ -105,9 +105,6 @@ export default function PhotographyPage({ initialData }: PhotographyPageProps) {
             transition={{ duration: 0.4, ease: "easeInOut" }}
             className="col-span-12 grid grid-cols-12 gap-x-4"
           >
-            {/* Foto grande */}
-            /* components/PhotographyPage.tsx */ ...
-            {/* Foto grande */}
             <article className="col-span-12 md:col-start-3 md:col-span-6 text-black p-6 md:pt-10 md:px-0 space-y-6">
               {active.imageFull && (
                 <a
