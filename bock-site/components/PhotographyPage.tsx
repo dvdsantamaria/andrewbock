@@ -63,9 +63,11 @@ export default function PhotographyPage({ initialData }: PhotographyPageProps) {
       : intro ?? null;
 
   /* sub-menú */
-  const categories = Array.from(
-    new Set(photos.map((p) => p.category).filter((c) => c && c !== "general"))
-  ).sort();
+  const preferredOrder = ["nature", "travel", "blur"];
+
+  const categories = preferredOrder.filter((slug) =>
+    photos.some((p) => p.category === slug)
+  );
 
   /* thumbs filtrados */
   const thumbs = category

@@ -82,12 +82,7 @@ export const getPhotographyPhotos = async (): Promise<PhotoItem[]> => {
 /* -------------------- Extras -------------------- */
 export const getCategories = async (): Promise<string[]> => {
   const photos = await getPhotographyPhotos();
-
-  const preferredOrder = ["nature", "travel", "blur"];
-
-  return preferredOrder.filter((slug) =>
-    photos.some((p) => p.category === slug)
-  );
+  return Array.from(new Set(photos.map((p) => p.category)));
 };
 
 export const getRandomPhotoForCategory = async (
