@@ -106,19 +106,27 @@ export default function PhotographyPage({ initialData }: PhotographyPageProps) {
             className="col-span-12 grid grid-cols-12 gap-x-4"
           >
             {/* Foto grande */}
+            /* components/PhotographyPage.tsx */ ...
+            {/* Foto grande */}
             <article className="col-span-12 md:col-start-3 md:col-span-6 text-black p-6 md:pt-10 md:px-0 space-y-6">
               {active.imageFull && (
-                <img
-                  src={active.imageFull}
-                  alt={active.title}
-                  className="w-full max-h-[80vh] object-contain"
-                />
+                <a
+                  href={active.imageFull}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img
+                    src={active.imageFull}
+                    alt={active.title}
+                    className="w-full max-h-[80vh] object-contain"
+                  />
+                </a>
               )}
               {active.title && (
                 <p className="italic text-gray-500">{active.title}</p>
               )}
             </article>
-
+            ...
             {/* Tira de thumbs */}
             <div className="col-span-12 lg:col-start-3 lg:col-span-7 pt-6">
               <ul className="flex overflow-x-auto gap-4 pb-2 scrollbar-hide">
@@ -139,7 +147,6 @@ export default function PhotographyPage({ initialData }: PhotographyPageProps) {
                 ))}
               </ul>
             </div>
-
             <Footer />
           </motion.div>
         </AnimatePresence>
