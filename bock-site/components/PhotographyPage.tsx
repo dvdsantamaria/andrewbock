@@ -123,8 +123,8 @@ export default function PhotographyPage({ initialData }: PhotographyPageProps) {
                 <p className="italic text-gray-500">{active.title}</p>
               )}
             </article>
-            ...
-            {/* Tira de thumbs */}
+
+            {/*  thumbs */}
             <div className="col-span-12 lg:col-start-3 lg:col-span-7 pt-6">
               <ul className="flex overflow-x-auto gap-4 pb-2 scrollbar-hide">
                 {thumbs.map((t) => (

@@ -11,9 +11,10 @@ export default function Footer() {
 
       {/* ───── meta info (Contact · Copyright) ───── */}
       <div className="grid grid-cols-12 text-sm py-8 text-[var(--menu-text)]">
-        <p className="col-start-1 col-span-3">Contact</p>
-        <p className="col-start-9 col-span-5 ">
-          © Copyright Andrew Bock 2025. All rights reserved.
+        <p className="col-span-12 md:col-start-1 md:col-span-3">Contact</p>
+        <p className="col-span-12 md:col-start-9 md:col-span-5">
+          © Copyright Andrew Bock {new Date().getFullYear()}. All rights
+          reserved.
         </p>
       </div>
     </footer>
