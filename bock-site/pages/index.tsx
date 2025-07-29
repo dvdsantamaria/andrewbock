@@ -8,13 +8,11 @@ import Footer from "@/components/Footer";
 import TopStrokes from "@/components/TopStrokes";
 import MidStrokes from "@/components/MidStrokes";
 
-/* API helpers */
 import { getAboutArticles } from "@/lib/about";
 import { getDesignArticles } from "@/lib/design";
 import { getPhotographyPhotos } from "@/lib/photography";
 import { getWritingArticles } from "@/lib/writing";
 
-/* helpers */
 const normalizeImagePath = (path?: string | null): string =>
   path?.startsWith("http") ? path : path ? `/${path.replace(/^\/+/, "")}` : "";
 
@@ -27,7 +25,6 @@ const sampleN = <T,>(arr: T[], n: number, hasImg: (item: T) => boolean) => {
     .slice(0, Math.min(n, withImg.length));
 };
 
-/* props */
 interface HomeProps {
   writingData: any[];
   photoData: any[];
@@ -35,7 +32,6 @@ interface HomeProps {
   aboutData: any[];
 }
 
-/* component */
 export default function Home({
   writingData,
   photoData,
@@ -112,8 +108,8 @@ export default function Home({
         <div className="col-span-12 grid grid-cols-12 gap-x-4">
           {/* WRITING */}
           <SectionHeading title="Writing" />
-          {/* Mobile list (unchanged) */}
-          <ul className="col-span-12 md:hidden space-y-1 text-[18px] leading-snug mt-2 pl-[5%]">
+
+          <ul className="col-span-12 md:hidden space-y-2 text-[19px] leading-relaxed mt-4 mb-6 pl-6">
             {writingLinks.map((l) => (
               <li key={l.href}>
                 <Link href={l.href} className="hover:text-[var(--accent)]">
@@ -123,8 +119,7 @@ export default function Home({
             ))}
           </ul>
 
-          {/* Desktop marquee centered */}
-          <div className="hidden md:flex col-span-10 md:col-start-3 md:min-h-[200px] items-center">
+          <div className="hidden md:flex col-span-10 md:col-start-3 md:min-h-[160px] items-center">
             <div className="relative w-full overflow-hidden">
               <div className="pointer-events-none absolute left-0 top-0 h-full w-16 bg-gradient-to-r from-[var(--background)] to-transparent" />
               <div className="pointer-events-none absolute right-0 top-0 h-full w-16 bg-gradient-to-l from-[var(--background)] to-transparent" />
@@ -134,7 +129,7 @@ export default function Home({
                     <Link
                       key={l.href}
                       href={l.href}
-                      className="hover:text-[var(--accent)] text-[20px] leading-snug"
+                      className="hover:text-[var(--accent)] text-[22px] leading-snug"
                     >
                       {l.label}
                     </Link>
@@ -148,7 +143,7 @@ export default function Home({
                     <span key={`${l.href}-dup-${i}`}>
                       <Link
                         href={l.href}
-                        className="hover:text-[var(--accent)] text-[20px] leading-snug"
+                        className="hover:text-[var(--accent)] text-[22px] leading-snug"
                       >
                         {l.label}
                       </Link>
@@ -179,9 +174,9 @@ export default function Home({
             <MidStrokes />
           </div>
 
-          {/* ABOUT (compact height to offset footer mt-12) */}
-          <SectionHeading title="About" compact />
-          <ThumbRow thumbs={pubThumbs} compact />
+          {/* ABOUT */}
+          <SectionHeading title="About" offsetUp />
+          <ThumbRow thumbs={pubThumbs} offsetUp />
 
           <Footer />
         </div>
@@ -210,7 +205,6 @@ export default function Home({
   );
 }
 
-/* getStaticProps */
 export async function getStaticProps() {
   const [writingData, photoData, designData, aboutData] = await Promise.all([
     getWritingArticles(),
@@ -225,18 +219,17 @@ export async function getStaticProps() {
   };
 }
 
-/* UI helpers */
 function SectionHeading({
   title,
-  compact = false,
+  offsetUp = false,
 }: {
   title: string;
-  compact?: boolean;
+  offsetUp?: boolean;
 }) {
   return (
     <h2
-      className={`col-span-12 md:col-span-2 md:col-start-1 pl-[5%] md:pl-0 italic text-2xl md:text-3xl flex items-center ${
-        compact ? "md:min-h-[152px]" : "md:min-h-[200px]"
+      className={`col-span-12 md:col-span-2 md:col-start-1 pl-[5%] md:pl-0 italic text-2xl md:text-3xl flex items-center md:min-h-[160px] ${
+        offsetUp ? "md:-mt-10" : ""
       }`}
       style={{
         fontFamily: `"Palatino Linotype","Book Antiqua",Palatino,serif`,
@@ -249,10 +242,10 @@ function SectionHeading({
 
 function ThumbRow({
   thumbs,
-  compact = false,
+  offsetUp = false,
 }: {
   thumbs: Thumb[];
-  compact?: boolean;
+  offsetUp?: boolean;
 }) {
   return (
     <>
@@ -261,15 +254,15 @@ function ThumbRow({
           key={t.href}
           className={`col-span-12 md:col-span-2 ${
             i === 0 ? "md:col-start-3" : ""
-          } md:flex md:items-center ${
-            compact ? "md:min-h-[152px]" : "md:min-h-[200px]"
-          } py-6 md:py-0`}
+          } md:flex md:items-center md:min-h-[160px] ${
+            offsetUp ? "md:-mt-10" : ""
+          }`}
         >
           <Link href={t.href} className="block group w-full">
             <img
               src={t.src}
               alt={t.alt}
-              className="aspect-[3/2] max-w-[90%] mx-auto object-cover border border-gray-300 group-hover:border-[var(--accent)] transition"
+              className="aspect-[3/2] max-w-[75%] mx-auto object-cover border border-gray-300 group-hover:border-[var(--accent)] transition"
             />
           </Link>
         </div>
