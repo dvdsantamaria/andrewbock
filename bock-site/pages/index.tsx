@@ -109,7 +109,7 @@ export default function Home({
           {/* WRITING */}
           <SectionHeading title="Writing" />
 
-          {/* Mobile list (más aire) */}
+          {/* Mobile list */}
           <ul className="col-span-12 md:hidden space-y-3 text-[19px] leading-relaxed mt-6 mb-8 px-6">
             {writingLinks.map((l) => (
               <li key={l.href}>
@@ -120,12 +120,12 @@ export default function Home({
             ))}
           </ul>
 
-          {/* Desktop marquee centrada */}
-          <div className="hidden md:flex col-span-10 md:col-start-3 md:min-h-[160px] items-center">
+          {/* Desktop marquee (ends at col 11, gradients visible) */}
+          <div className="hidden md:flex md:col-start-3 md:col-span-9 md:min-h-[160px] items-center">
             <div className="relative w-full overflow-hidden">
-              <div className="pointer-events-none absolute left-0 top-0 h-full w-16 bg-gradient-to-r from-[var(--background)] to-transparent" />
-              <div className="pointer-events-none absolute right-0 top-0 h-full w-16 bg-gradient-to-l from-[var(--background)] to-transparent" />
-              <div className="marquee whitespace-nowrap">
+              <div className="pointer-events-none absolute left-0 top-0 h-full w-16 bg-gradient-to-r from-[var(--background)] to-transparent z-10" />
+              <div className="pointer-events-none absolute right-0 top-0 h-full w-16 bg-gradient-to-l from-[var(--background)] to-transparent z-10" />
+              <div className="marquee whitespace-nowrap relative z-0">
                 <div className="marquee-track inline-flex gap-12 pr-12">
                   {writingLinks.map((l) => (
                     <Link
@@ -176,7 +176,7 @@ export default function Home({
             <MidStrokes />
           </div>
 
-          {/* ABOUT (centrado fino) */}
+          {/* ABOUT — lower height + fine centering vs footer */}
           <SectionHeading title="About" footerCompensate />
           <ThumbRow thumbs={pubThumbs} footerCompensate />
 
@@ -232,8 +232,12 @@ function SectionHeading({
   return (
     <h2
       className={`col-span-12 md:col-span-2 md:col-start-1 italic text-2xl md:text-3xl
-      flex items-center md:min-h-[160px] px-6 md:px-0 mt-8 mb-3 md:mt-0 md:mb-0
-      ${footerCompensate ? "md:translate-y-6" : ""}`}
+      flex items-center px-6 md:px-0 mt-8 mb-3 md:mt-0 md:mb-0
+      ${
+        footerCompensate
+          ? "md:min-h-[140px] md:translate-y-[18px]"
+          : "md:min-h-[160px]"
+      }`}
       style={{
         fontFamily: `"Palatino Linotype","Book Antiqua",Palatino,serif`,
       }}
@@ -258,8 +262,12 @@ function ThumbRow({
           className={`col-span-12 md:col-span-2 ${
             i === 0 ? "md:col-start-3" : ""
           }
-          md:flex md:items-center md:min-h-[160px] px-6 md:px-0 py-4 md:py-0
-          ${footerCompensate ? "md:translate-y-6" : ""}`}
+          md:flex md:items-center px-6 md:px-0 py-4 md:py-0
+          ${
+            footerCompensate
+              ? "md:min-h-[140px] md:translate-y-[18px]"
+              : "md:min-h-[160px]"
+          }`}
         >
           <Link href={t.href} className="block group w-full">
             <img
