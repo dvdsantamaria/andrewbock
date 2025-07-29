@@ -14,7 +14,7 @@ import { getDesignArticles } from "@/lib/design";
 import { getPhotographyPhotos } from "@/lib/photography";
 import { getWritingArticles } from "@/lib/writing";
 
-/* ───────────────── helpers ───────────────── */
+/* helpers */
 const normalizeImagePath = (path?: string | null): string =>
   path?.startsWith("http") ? path : path ? `/${path.replace(/^\/+/, "")}` : "";
 
@@ -27,7 +27,7 @@ const sampleN = <T,>(arr: T[], n: number, hasImg: (item: T) => boolean) => {
     .slice(0, Math.min(n, withImg.length));
 };
 
-/* ───────────── props ───────────── */
+/* props */
 interface HomeProps {
   writingData: any[];
   photoData: any[];
@@ -35,14 +35,14 @@ interface HomeProps {
   aboutData: any[];
 }
 
-/* ─────────── component ─────────── */
+/* component */
 export default function Home({
   writingData,
   photoData,
   designData,
   aboutData,
 }: HomeProps) {
-  /* Writing (solo texto) */
+  /* Writing links */
   const writingLinks = writingData.slice(0, 18).map((a) => ({
     label: a.title,
     href: `/writing/${a.category}/${a.slug}`,
@@ -53,7 +53,7 @@ export default function Home({
   const [pubThumbs, setPubThumbs] = useState<Thumb[]>([]);
 
   useEffect(() => {
-    /* PHOTOGRAPHY – usa cualquier thumb disponible */
+    /* PHOTOGRAPHY */
     setPhotoThumbs(
       sampleN(
         photoData,
@@ -68,7 +68,7 @@ export default function Home({
       }))
     );
 
-    /* DESIGN – prioridad center > top > bottom > imageFull */
+    /* DESIGN */
     setDesignThumbs(
       sampleN(
         designData,
@@ -92,12 +92,12 @@ export default function Home({
       })
     );
 
-    /* ABOUT / PUBLICATIONS – ahora a /about/<slug> */
+    /* ABOUT / PUBLICATIONS */
     setPubThumbs(
       sampleN(aboutData, 1, (p: any) => p.imageThumb || p.imageFull).map(
         (p: any) => ({
           src: normalizeImagePath(p.imageThumb || p.imageFull),
-          href: `/about/${p.slug}`, // ← link directo al slug
+          href: `/about/${p.slug}`,
           alt: p.title,
         })
       )
@@ -116,7 +116,8 @@ export default function Home({
         <div className="col-span-12 grid grid-cols-12 gap-x-4">
           {/* WRITING */}
           <SectionHeading title="Writing" />
-          <ul className="col-span-8 md:col-span-10 md:col-start-3 space-y-1 text-[17px] leading-snug mt-8">
+          {/* Mobile: keep current list */}
+          <ul className="col-span-12 md:hidden space-y-1 text-[18px] leading-snug mt-2 pl-[5%]">
             {writingLinks.map((l) => (
               <li key={l.href}>
                 <Link href={l.href} className="hover:text-[var(--accent)]">
@@ -126,9 +127,47 @@ export default function Home({
             ))}
           </ul>
 
+          {/* Desktop: marquee with subtle side gradients */}
+          <div className="hidden md:block col-span-10 md:col-start-3 py-8">
+            <div className="relative overflow-hidden">
+              <div className="pointer-events-none absolute left-0 top-0 h-full w-16 bg-gradient-to-r from-[var(--background)] to-transparent" />
+              <div className="pointer-events-none absolute right-0 top-0 h-full w-16 bg-gradient-to-l from-[var(--background)] to-transparent" />
+              <div className="marquee whitespace-nowrap">
+                <div className="marquee-track inline-flex gap-12 pr-12">
+                  {writingLinks.map((l) => (
+                    <Link
+                      key={l.href}
+                      href={l.href}
+                      className="hover:text-[var(--accent)] text-[18px] leading-snug"
+                    >
+                      {l.label}
+                    </Link>
+                  ))}
+                </div>
+                {/* duplicate for seamless loop */}
+                <div
+                  className="marquee-track inline-flex gap-12 pr-12"
+                  aria-hidden="true"
+                >
+                  {writingLinks.map((l, i) => (
+                    <span key={`${l.href}-dup-${i}`}>
+                      <Link
+                        href={l.href}
+                        className="hover:text-[var(--accent)] text-[18px] leading-snug"
+                      >
+                        {l.label}
+                      </Link>
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div className="col-span-full my-4">
             <MidStrokes />
           </div>
+
           {/* PHOTOGRAPHY */}
           <SectionHeading title="Photography" />
           <ThumbRow thumbs={photoThumbs} />
@@ -136,12 +175,15 @@ export default function Home({
           <div className="col-span-full my-4">
             <MidStrokes />
           </div>
+
           {/* DESIGN */}
           <SectionHeading title="Design" />
           <ThumbRow thumbs={designThumbs} />
+
           <div className="col-span-full my-4">
             <MidStrokes />
           </div>
+
           {/* ABOUT */}
           <SectionHeading title="About" />
           <ThumbRow thumbs={pubThumbs} />
@@ -149,11 +191,30 @@ export default function Home({
           <Footer />
         </div>
       </MainLayout>
+
+      {/* Minimal CSS for marquee */}
+      <style jsx>{`
+        .marquee {
+          display: flex;
+          width: 100%;
+        }
+        .marquee-track {
+          animation: marquee 28s linear infinite;
+        }
+        @keyframes marquee {
+          from {
+            transform: translateX(0);
+          }
+          to {
+            transform: translateX(-50%);
+          }
+        }
+      `}</style>
     </>
   );
 }
 
-/* ────────── getStaticProps ────────── */
+/* getStaticProps */
 export async function getStaticProps() {
   const [writingData, photoData, designData, aboutData] = await Promise.all([
     getWritingArticles(),
@@ -168,11 +229,11 @@ export async function getStaticProps() {
   };
 }
 
-/* ─────────── UI helpers ─────────── */
+/* UI helpers */
 function SectionHeading({ title }: { title: string }) {
   return (
     <h2
-      className="col-span-8 md:col-span-2 md:col-start-1 mt-8 italic text-2xl md:text-3xl"
+      className="col-span-12 md:col-span-2 md:col-start-1 py-8 md:py-10 italic text-2xl md:text-3xl pl-[5%] md:pl-0 flex items-center"
       style={{
         fontFamily: `"Palatino Linotype","Book Antiqua",Palatino,serif`,
       }}
@@ -190,7 +251,7 @@ function ThumbRow({ thumbs }: { thumbs: Thumb[] }) {
           key={t.href}
           className={`col-span-12 md:col-span-2 ${
             i === 0 ? "md:col-start-3" : ""
-          } py-4`}
+          } py-8 md:py-10`}
         >
           <Link href={t.href} className="block group">
             <img
