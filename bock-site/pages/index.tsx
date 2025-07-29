@@ -42,7 +42,6 @@ export default function Home({
   designData,
   aboutData,
 }: HomeProps) {
-  /* Writing links */
   const writingLinks = writingData.slice(0, 18).map((a) => ({
     label: a.title,
     href: `/writing/${a.category}/${a.slug}`,
@@ -116,7 +115,7 @@ export default function Home({
         <div className="col-span-12 grid grid-cols-12 gap-x-4">
           {/* WRITING */}
           <SectionHeading title="Writing" />
-          {/* Mobile: keep current list */}
+          {/* Mobile list (kept as is) */}
           <ul className="col-span-12 md:hidden space-y-1 text-[18px] leading-snug mt-2 pl-[5%]">
             {writingLinks.map((l) => (
               <li key={l.href}>
@@ -127,9 +126,9 @@ export default function Home({
             ))}
           </ul>
 
-          {/* Desktop: marquee with subtle side gradients */}
-          <div className="hidden md:block col-span-10 md:col-start-3 py-8">
-            <div className="relative overflow-hidden">
+          {/* Desktop marquee */}
+          <div className="hidden md:block col-span-10 md:col-start-3 md:min-h-[280px] flex items-center">
+            <div className="relative w-full overflow-hidden">
               <div className="pointer-events-none absolute left-0 top-0 h-full w-16 bg-gradient-to-r from-[var(--background)] to-transparent" />
               <div className="pointer-events-none absolute right-0 top-0 h-full w-16 bg-gradient-to-l from-[var(--background)] to-transparent" />
               <div className="marquee whitespace-nowrap">
@@ -138,13 +137,12 @@ export default function Home({
                     <Link
                       key={l.href}
                       href={l.href}
-                      className="hover:text-[var(--accent)] text-[18px] leading-snug"
+                      className="hover:text-[var(--accent)] text-[20px] md:text-[22px] leading-snug"
                     >
                       {l.label}
                     </Link>
                   ))}
                 </div>
-                {/* duplicate for seamless loop */}
                 <div
                   className="marquee-track inline-flex gap-12 pr-12"
                   aria-hidden="true"
@@ -153,7 +151,7 @@ export default function Home({
                     <span key={`${l.href}-dup-${i}`}>
                       <Link
                         href={l.href}
-                        className="hover:text-[var(--accent)] text-[18px] leading-snug"
+                        className="hover:text-[var(--accent)] text-[20px] md:text-[22px] leading-snug"
                       >
                         {l.label}
                       </Link>
@@ -192,13 +190,15 @@ export default function Home({
         </div>
       </MainLayout>
 
-      {/* Minimal CSS for marquee */}
+      {/* minimal CSS for marquee */}
       <style jsx>{`
         .marquee {
           display: flex;
-          width: 100%;
+          width: 200%;
         }
         .marquee-track {
+          flex: 0 0 50%;
+          will-change: transform;
           animation: marquee 28s linear infinite;
         }
         @keyframes marquee {
@@ -206,7 +206,7 @@ export default function Home({
             transform: translateX(0);
           }
           to {
-            transform: translateX(-50%);
+            transform: translateX(-100%);
           }
         }
       `}</style>
@@ -214,7 +214,7 @@ export default function Home({
   );
 }
 
-/* getStaticProps */
+/* SSG */
 export async function getStaticProps() {
   const [writingData, photoData, designData, aboutData] = await Promise.all([
     getWritingArticles(),
@@ -233,7 +233,7 @@ export async function getStaticProps() {
 function SectionHeading({ title }: { title: string }) {
   return (
     <h2
-      className="col-span-12 md:col-span-2 md:col-start-1 py-8 md:py-10 italic text-2xl md:text-3xl pl-[5%] md:pl-0 flex items-center"
+      className="col-span-12 md:col-span-2 md:col-start-1 py-8 md:py-0 md:min-h-[280px] italic text-2xl md:text-3xl pl-[5%] md:pl-0 flex items-center"
       style={{
         fontFamily: `"Palatino Linotype","Book Antiqua",Palatino,serif`,
       }}
@@ -251,9 +251,9 @@ function ThumbRow({ thumbs }: { thumbs: Thumb[] }) {
           key={t.href}
           className={`col-span-12 md:col-span-2 ${
             i === 0 ? "md:col-start-3" : ""
-          } py-8 md:py-10`}
+          } py-6 md:py-0 md:min-h-[280px] flex items-center`}
         >
-          <Link href={t.href} className="block group">
+          <Link href={t.href} className="block group w-full">
             <img
               src={t.src}
               alt={t.alt}
