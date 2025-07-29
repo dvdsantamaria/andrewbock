@@ -77,9 +77,13 @@ export const getWritingArticles = async (): Promise<Article[]> => {
 
 export const getWritingCategories = async (): Promise<string[]> => {
   const articles = await getWritingArticles();
-  return Array.from(new Set(articles.map((a) => a.category)));
-};
 
+  const preferredOrder = ["journalism", "travel", "fiction"];
+
+  return preferredOrder.filter((slug) =>
+    articles.some((a) => a.category === slug)
+  );
+};
 export const getWritingSlugs = async (): Promise<
   { category: string; slug: string }[]
 > => {
