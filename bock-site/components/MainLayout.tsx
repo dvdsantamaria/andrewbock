@@ -40,8 +40,8 @@ export default function MainLayout({
   } = theme;
 
   /* helpers */
-  const TOP_MENU = ["Writing", "Design", "Photography", "About"];  const buildSlug = (s: string) =>
-    const buildSlug = (s: string) => s.toLowerCase().replace(/\s+/g, "-");
+  const TOP_MENU = ["Writing", "Design", "Photography", "About"];
+  const buildSlug = (s: string) => s.toLowerCase().replace(/\s+/g, "-");
 
   const router = useRouter();
   const [currentMain, currentSub] = router.asPath

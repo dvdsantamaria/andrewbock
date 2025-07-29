@@ -11,7 +11,7 @@ import { useMediaQuery } from "react-responsive";
 
 /* ---------- tema local ---------- */
 const theme: Record<string, string> = {
-  background: "#B4B2A6",
+  background: "#A7A9AC",
   accent: "#EDBE1C",
   menuText: "#000000",
   menuHover: "#EDBE1C",
