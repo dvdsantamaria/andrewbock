@@ -94,7 +94,7 @@ export default function AboutPage({
 
             {/* ► menú desplegable mobile */}
             {related.length > 0 && (
-              <div className="col-span-8 md:hidden px-4 pt-4">
+              <div className="col-span-12 md:hidden px-4 pt-4">
                 <details className="border border-gray-300 rounded-md bg-white">
                   <summary className="cursor-pointer px-4 py-2 text-sm font-semibold text-[var(--menuText)] hover:text-[var(--accent)]">
                     Explore&nbsp;more
