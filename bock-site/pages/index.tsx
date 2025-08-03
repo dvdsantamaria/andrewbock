@@ -232,7 +232,7 @@ function SectionHeading({
   return (
     <h2
       className={`col-span-12 md:col-span-2 md:col-start-1 italic text-2xl md:text-3xl
-      flex items-center px-6 md:px-0 mt-8 mb-3 md:mt-0 md:mb-0
+      flex items-center md:px-0 mt-8 mb-3 md:mt-0 md:mb-0
       ${
         footerCompensate
           ? "md:min-h-[140px] md:translate-y-[18px]"
@@ -242,7 +242,12 @@ function SectionHeading({
         fontFamily: `"Palatino Linotype","Book Antiqua",Palatino,serif`,
       }}
     >
-      {title}
+      {/* mobile: match image width and centering (same as 90% imgs) */}
+      <span className="block w-full px-6 md:px-0">
+        <span className="block max-w-[90%] md:max-w-none mx-auto md:mx-0">
+          {title}
+        </span>
+      </span>
     </h2>
   );
 }
