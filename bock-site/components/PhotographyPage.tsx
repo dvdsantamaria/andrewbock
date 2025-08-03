@@ -65,8 +65,8 @@ export default function PhotographyPage({ initialData }: PhotographyPageProps) {
   /* sub-menú */
   const preferredOrder = ["nature", "travel", "blur"];
 
-  const categories = preferredOrder.filter((slug) =>
-    photos.some((p) => p.category === slug)
+  const categoriesList = preferredOrder.filter((s) =>
+    photos.some((p) => p.category === s)
   );
 
   /* thumbs filtrados */
@@ -93,7 +93,9 @@ export default function PhotographyPage({ initialData }: PhotographyPageProps) {
 
       <MainLayout
         section="photography"
-        subMenuItems={categories.map((c) => c[0].toUpperCase() + c.slice(1))}
+        subMenuItems={categoriesList.map(
+          (c) => c[0].toUpperCase() + c.slice(1)
+        )}
         theme={theme}
       >
         <AnimatePresence mode="wait">
@@ -105,6 +107,37 @@ export default function PhotographyPage({ initialData }: PhotographyPageProps) {
             transition={{ duration: 0.4, ease: "easeInOut" }}
             className="col-span-12 grid grid-cols-12 gap-x-4"
           >
+            {/* mobile: 3 categories full-width, centered, spaced. Hidden if hamburger menu is open */}
+            <div className="col-span-12 md:hidden px-4 pt-6 photography-mobile-chips">
+              <ul className="w-full flex items-center justify-evenly uppercase tracking-widest text-xs font-semibold text-[var(--menu-text)] py-3 mb-4">
+                {categoriesList.slice(0, 3).map((cat, idx) => {
+                  const isActive = category === cat;
+                  const label = cat[0].toUpperCase() + cat.slice(1);
+                  return (
+                    <li key={cat} className="flex items-center">
+                      {idx > 0 && (
+                        <span
+                          aria-hidden="true"
+                          className="inline-block w-[6px] h-[12px] bg-[var(--accent)] mr-3"
+                        />
+                      )}
+                      <Link
+                        href={`/photography/${cat}`}
+                        className={
+                          isActive
+                            ? "text-[var(--accent)]"
+                            : "hover:text-[var(--accent)]"
+                        }
+                        aria-label={`Go to ${label}`}
+                      >
+                        {label}
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+
             <article className="col-span-12 md:col-start-3 md:col-span-6 text-black p-6 md:pt-10 md:px-0 space-y-6">
               {active.imageFull && (
                 <a
