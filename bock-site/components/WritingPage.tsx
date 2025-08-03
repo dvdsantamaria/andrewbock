@@ -100,10 +100,10 @@ export default function WritingPage({
             transition={{ duration: 0.4, ease: "easeInOut" }}
             className="col-span-12 grid grid-cols-12 gap-x-4"
           >
-            {/* mobile: top 3 categories in one line, hide when dropdown is open */}
-            <div className="col-span-12 md:hidden px-4 pt-4 writing-mobile-chips">
+            {/* mobile: 3 categories full-width, centered, spaced. Hide if dropdown open */}
+            <div className="col-span-12 md:hidden px-4 pt-6 writing-mobile-chips">
               <div className="flex flex-col">
-                {/* dropdown primero en el DOM para usar peer-open */}
+                {/* dropdown primero para usar peer-open */}
                 {related.length > 0 && (
                   <details className="peer order-2 border border-gray-300 rounded-md bg-white">
                     <summary className="cursor-pointer px-4 py-2 text-sm font-semibold text-[var(--menuText)] hover:text-[var(--accent)]">
@@ -124,34 +124,34 @@ export default function WritingPage({
                   </details>
                 )}
 
-                {/* fila de categorías con estilo de menú (uppercase + mini strokes) */}
-                <div className="order-1 peer-open:hidden flex flex-nowrap items-center gap-3 overflow-x-auto pb-2">
+                {/* fila de categorías (full width) */}
+                <ul className="order-1 peer-open:hidden w-full flex items-center justify-evenly uppercase tracking-widest text-xs font-semibold text-[var(--menuText)] py-3 mb-4">
                   {categories.slice(0, 3).map((cat, idx) => {
                     const isActive = category === cat;
                     return (
-                      <React.Fragment key={cat}>
+                      <li key={cat} className="flex items-center">
+                        {/* mini stroke entre items */}
                         {idx > 0 && (
                           <span
                             aria-hidden="true"
-                            className="inline-block w-[6px] h-[12px] bg-[var(--accent)]"
+                            className="inline-block w-[6px] h-[12px] bg-[var(--accent)] mr-3"
                           />
                         )}
                         <Link
                           href={`/writing/${cat}`}
-                          className={[
-                            "shrink-0 uppercase tracking-widest text-xs font-semibold",
+                          className={
                             isActive
                               ? "text-[var(--accent)]"
-                              : "text-[var(--menuText)] hover:text-[var(--accent)]",
-                          ].join(" ")}
+                              : "hover:text-[var(--accent)]"
+                          }
                           aria-label={`Go to ${cat}`}
                         >
                           {cap(cat)}
                         </Link>
-                      </React.Fragment>
+                      </li>
                     );
                   })}
-                </div>
+                </ul>
               </div>
             </div>
 

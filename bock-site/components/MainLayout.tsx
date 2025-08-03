@@ -1,5 +1,5 @@
 /* components/MainLayout.tsx */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react"; // add useEffect
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Image from "next/image";
@@ -29,7 +29,17 @@ export default function MainLayout({
 }: MainLayoutProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  /* palette (con fallback) */
+  // reflect menu state on <body> so other components can react (eg. hide chips)
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.setAttribute("data-menu-open", "true");
+    } else {
+      document.body.removeAttribute("data-menu-open");
+    }
+    return () => document.body.removeAttribute("data-menu-open");
+  }, [mobileMenuOpen]);
+
+  /* palette (fallbacks) */
   const {
     background = "#A7A9AC",
     accent = "#CDE59C",
@@ -121,6 +131,8 @@ export default function MainLayout({
           {/* burger mobile */}
           <div className="col-span-8 md:hidden flex justify-end items-center pr-4">
             <button
+              type="button"
+              aria-expanded={mobileMenuOpen} // a11y and for :has CSS if used
               onClick={() => setMobileMenuOpen((o) => !o)}
               className="text-[28px] p-2 text-[var(--menu-text)]"
               aria-label="Toggle menu"
