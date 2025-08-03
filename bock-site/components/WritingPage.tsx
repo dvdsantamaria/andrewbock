@@ -101,9 +101,9 @@ export default function WritingPage({
             className="col-span-12 grid grid-cols-12 gap-x-4"
           >
             {/* mobile: top 3 categories in one line, hide when dropdown is open */}
-            <div className="col-span-12 md:hidden px-4 pt-4">
+            <div className="col-span-12 md:hidden px-4 pt-4 writing-mobile-chips">
               <div className="flex flex-col">
-                {/* dropdown first in DOM to drive peer-open */}
+                {/* dropdown primero en el DOM para usar peer-open */}
                 {related.length > 0 && (
                   <details className="peer order-2 border border-gray-300 rounded-md bg-white">
                     <summary className="cursor-pointer px-4 py-2 text-sm font-semibold text-[var(--menuText)] hover:text-[var(--accent)]">
@@ -124,27 +124,31 @@ export default function WritingPage({
                   </details>
                 )}
 
-                {/* category chips row (one line). Hidden when details is open */}
-                <div className="order-1 flex flex-nowrap gap-2 overflow-x-auto pb-2 peer-open:hidden">
-                  {categories.slice(0, 3).map((cat) => {
+                {/* fila de categorías con estilo de menú (uppercase + mini strokes) */}
+                <div className="order-1 peer-open:hidden flex flex-nowrap items-center gap-3 overflow-x-auto pb-2">
+                  {categories.slice(0, 3).map((cat, idx) => {
                     const isActive = category === cat;
-                    const base =
-                      "shrink-0 px-3 py-1 text-sm border rounded-full transition-colors whitespace-nowrap";
-                    const activeCls =
-                      "bg-[var(--accent)] text-white border-[var(--accent)]";
-                    const normalCls =
-                      "bg-white text-[var(--menuText)] border-gray-300 hover:text-[var(--accent)]";
                     return (
-                      <Link
-                        key={cat}
-                        href={`/writing/${cat}`}
-                        className={`${base} ${
-                          isActive ? activeCls : normalCls
-                        }`}
-                        aria-label={`Go to ${cat}`}
-                      >
-                        {cap(cat)}
-                      </Link>
+                      <React.Fragment key={cat}>
+                        {idx > 0 && (
+                          <span
+                            aria-hidden="true"
+                            className="inline-block w-[6px] h-[12px] bg-[var(--accent)]"
+                          />
+                        )}
+                        <Link
+                          href={`/writing/${cat}`}
+                          className={[
+                            "shrink-0 uppercase tracking-widest text-xs font-semibold",
+                            isActive
+                              ? "text-[var(--accent)]"
+                              : "text-[var(--menuText)] hover:text-[var(--accent)]",
+                          ].join(" ")}
+                          aria-label={`Go to ${cat}`}
+                        >
+                          {cap(cat)}
+                        </Link>
+                      </React.Fragment>
                     );
                   })}
                 </div>

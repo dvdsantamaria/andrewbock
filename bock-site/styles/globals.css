@@ -36,3 +36,15 @@ body {
 .text-outline {
   -webkit-text-stroke: 1px #a7a9ac;
 }
+
+/* Hide mobile chips when the global mobile menu is open */
+/* Works if your hamburger button toggles aria-expanded */
+html:has(button[aria-expanded="true"]) .writing-mobile-chips {
+  display: none;
+}
+
+/* Fallbacks si usás una clase global al abrir el menú */
+html.nav-open .writing-mobile-chips,
+body.nav-open .writing-mobile-chips {
+  display: none;
+}
