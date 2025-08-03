@@ -100,28 +100,56 @@ export default function WritingPage({
             transition={{ duration: 0.4, ease: "easeInOut" }}
             className="col-span-12 grid grid-cols-12 gap-x-4"
           >
-            {/* dropdown móvil */}
-            {related.length > 0 && (
-              <div className="col-span-12 md:hidden px-4 pt-4">
-                <details className="border border-gray-300 rounded-md bg-white">
-                  <summary className="cursor-pointer px-4 py-2 text-sm font-semibold text-[var(--menuText)] hover:text-[var(--accent)]">
-                    Explore more
-                  </summary>
-                  <ul className="px-4 py-2 space-y-1">
-                    {related.map((r) => (
-                      <li key={r.href}>
-                        <Link
-                          href={r.href}
-                          className="block text-sm hover:text-[var(--accent)]"
-                        >
-                          {r.label}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </details>
+            {/* mobile: top 3 categories in one line, hide when dropdown is open */}
+            <div className="col-span-12 md:hidden px-4 pt-4">
+              <div className="flex flex-col">
+                {/* dropdown first in DOM to drive peer-open */}
+                {related.length > 0 && (
+                  <details className="peer order-2 border border-gray-300 rounded-md bg-white">
+                    <summary className="cursor-pointer px-4 py-2 text-sm font-semibold text-[var(--menuText)] hover:text-[var(--accent)]">
+                      Explore more
+                    </summary>
+                    <ul className="px-4 py-2 space-y-1">
+                      {related.map((r) => (
+                        <li key={r.href}>
+                          <Link
+                            href={r.href}
+                            className="block text-sm hover:text-[var(--accent)]"
+                          >
+                            {r.label}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </details>
+                )}
+
+                {/* category chips row (one line). Hidden when details is open */}
+                <div className="order-1 flex flex-nowrap gap-2 overflow-x-auto pb-2 peer-open:hidden">
+                  {categories.slice(0, 3).map((cat) => {
+                    const isActive = category === cat;
+                    const base =
+                      "shrink-0 px-3 py-1 text-sm border rounded-full transition-colors whitespace-nowrap";
+                    const activeCls =
+                      "bg-[var(--accent)] text-white border-[var(--accent)]";
+                    const normalCls =
+                      "bg-white text-[var(--menuText)] border-gray-300 hover:text-[var(--accent)]";
+                    return (
+                      <Link
+                        key={cat}
+                        href={`/writing/${cat}`}
+                        className={`${base} ${
+                          isActive ? activeCls : normalCls
+                        }`}
+                        aria-label={`Go to ${cat}`}
+                      >
+                        {cap(cat)}
+                      </Link>
+                    );
+                  })}
+                </div>
               </div>
-            )}
+            </div>
 
             {/* artículo principal (igual que en DesignPage) */}
             <article className="col-span-12 md:col-start-3 md:col-span-6 text-black p-6 md:pt-10 md:px-0 space-y-6">
