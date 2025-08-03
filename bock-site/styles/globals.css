@@ -41,3 +41,7 @@ body {
 body[data-menu-open="true"] .writing-mobile-chips {
   display: none;
 }
+
+body[data-menu-open="true"] .photography-mobile-chips {
+  display: none;
+}
