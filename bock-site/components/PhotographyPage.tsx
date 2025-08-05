@@ -156,7 +156,6 @@ export default function PhotographyPage({ initialData }: PhotographyPageProps) {
               )}
             </article>
             {/*  thumbs */}
-            /* thumbs */
             <div className="col-span-12 md:col-start-3 md:col-span-6 pt-6 px-6 md:px-0">
               <ul className="flex overflow-x-auto gap-4 pb-2 scrollbar-hide">
                 {thumbs.map((t) => (
