@@ -13,18 +13,16 @@ import { getDesignArticles } from "@/lib/design";
 import { getPhotographyPhotos } from "@/lib/photography";
 import { getWritingArticles } from "@/lib/writing";
 
+/* helpers -------------------------------------------- */
 const normalizeImagePath = (path?: string | null): string =>
   path?.startsWith("http") ? path : path ? `/${path.replace(/^\/+/, "")}` : "";
 
 type Thumb = { src: string; href: string; alt: string };
 
-const sampleN = <T,>(arr: T[], n: number, hasImg: (item: T) => boolean) => {
-  const withImg = arr.filter(hasImg);
-  return [...withImg]
-    .sort(() => 0.5 - Math.random())
-    .slice(0, Math.min(n, withImg.length));
-};
+const pickRandom = <T,>(arr: T[]) =>
+  arr[Math.floor(Math.random() * arr.length)];
 
+/* page props ----------------------------------------- */
 interface HomeProps {
   writingData: any[];
   photoData: any[];
@@ -32,70 +30,85 @@ interface HomeProps {
   aboutData: any[];
 }
 
+/* ---------------------------------------------------- */
 export default function Home({
   writingData,
   photoData,
   designData,
   aboutData,
 }: HomeProps) {
+  /* writing links ------------------------------------ */
   const writingLinks = writingData.slice(0, 18).map((a) => ({
     label: a.title,
     href: `/writing/${a.category}/${a.slug}`,
   }));
 
+  /* thumbs state ------------------------------------- */
   const [photoThumbs, setPhotoThumbs] = useState<Thumb[]>([]);
   const [designThumbs, setDesignThumbs] = useState<Thumb[]>([]);
   const [pubThumbs, setPubThumbs] = useState<Thumb[]>([]);
 
+  /* pick thumbs -------------------------------------- */
   useEffect(() => {
+    /* photography: 1 random de cada categoría (nature / travel / blur) */
+    const orderedCats = ["nature", "travel", "blur"];
     setPhotoThumbs(
-      sampleN(
-        photoData,
-        3,
-        (p: any) => p.imageThumbCenter || p.imageThumbTop || p.imageThumbBottom
-      ).map((p: any) => ({
-        src: normalizeImagePath(
-          p.imageThumbCenter || p.imageThumbTop || p.imageThumbBottom
-        ),
-        href: `/photography/${p.category}/${p.slug}`,
-        alt: p.title,
-      }))
+      orderedCats
+        .map((cat) => {
+          const pool = photoData.filter((p: any) => p.category === cat);
+          if (!pool.length) return null;
+          const p = pickRandom(pool);
+          const thumb =
+            p.imageThumbCenter || p.imageThumbTop || p.imageThumbBottom;
+          return {
+            src: normalizeImagePath(thumb),
+            href: `/photography/${p.category}/${p.slug}`,
+            alt: p.title,
+          } as Thumb;
+        })
+        .filter(Boolean) as Thumb[]
     );
 
+    /* design: 3 random con imagen */
     setDesignThumbs(
-      sampleN(
-        designData,
-        3,
-        (d: any) =>
-          d.imageThumbCenter ||
-          d.imageThumbTop ||
-          d.imageThumbBottom ||
-          d.imageFull
-      ).map((d: any) => {
-        const thumb =
-          d.imageThumbCenter ||
-          d.imageThumbTop ||
-          d.imageThumbBottom ||
-          d.imageFull;
-        return {
-          src: normalizeImagePath(thumb),
-          href: `/design/${d.slug}`,
-          alt: d.title,
-        };
-      })
+      [...designData]
+        .filter(
+          (d: any) =>
+            d.imageThumbCenter ||
+            d.imageThumbTop ||
+            d.imageThumbBottom ||
+            d.imageFull
+        )
+        .sort(() => 0.5 - Math.random())
+        .slice(0, 3)
+        .map((d: any) => {
+          const thumb =
+            d.imageThumbCenter ||
+            d.imageThumbTop ||
+            d.imageThumbBottom ||
+            d.imageFull;
+          return {
+            src: normalizeImagePath(thumb),
+            href: `/design/${d.slug}`,
+            alt: d.title,
+          };
+        })
     );
 
+    /* about: 1 random */
     setPubThumbs(
-      sampleN(aboutData, 1, (p: any) => p.imageThumb || p.imageFull).map(
-        (p: any) => ({
+      aboutData
+        .filter((p: any) => p.imageThumb || p.imageFull)
+        .slice(0, 1)
+        .map((p: any) => ({
           src: normalizeImagePath(p.imageThumb || p.imageFull),
           href: `/about/${p.slug}`,
           alt: p.title,
-        })
-      )
+        }))
     );
   }, [photoData, designData, aboutData]);
 
+  /* -------------------------------------------------- */
   return (
     <>
       <Head>
@@ -106,11 +119,11 @@ export default function Home({
         <TopStrokes />
 
         <div className="col-span-12 grid grid-cols-12 gap-x-4">
-          {/* WRITING */}
+          {/* WRITING --------------------------------------------------- */}
           <SectionHeading title="Writing" />
 
-          {/* Mobile list */}
-          <ul className="col-span-12 md:hidden space-y-3 text-[19px] leading-relaxed mt-6 mb-8 px-6">
+          {/* mobile list */}
+          <ul className="col-span-12 md:hidden space-y-3 text-[19px] leading-relaxed mt-6 mb-8 px-6 max-w-[90%] mx-auto">
             {writingLinks.map((l) => (
               <li key={l.href}>
                 <Link href={l.href} className="hover:text-[var(--accent)]">
@@ -120,18 +133,18 @@ export default function Home({
             ))}
           </ul>
 
-          {/* Desktop marquee (ends at col 11, gradients visible) */}
+          {/* desktop marquee */}
           <div className="hidden md:flex md:col-start-3 md:col-span-9 md:min-h-[160px] items-center">
             <div className="relative w-full overflow-hidden">
               <div className="pointer-events-none absolute left-0 top-0 h-full w-16 bg-gradient-to-r from-[var(--background)] to-transparent z-10" />
               <div className="pointer-events-none absolute right-0 top-0 h-full w-16 bg-gradient-to-l from-[var(--background)] to-transparent z-10" />
-              <div className="marquee whitespace-nowrap relative z-0">
+              <div className="marquee whitespace-nowrap relative z-0 text-black">
                 <div className="marquee-track inline-flex gap-12 pr-12">
                   {writingLinks.map((l) => (
                     <Link
                       key={l.href}
                       href={l.href}
-                      className="hover:text-[var(--accent)] text-[22px] leading-snug"
+                      className="hover:text-[var(--accent)] text-[22px] leading-snug text-black"
                     >
                       {l.label}
                     </Link>
@@ -145,7 +158,7 @@ export default function Home({
                     <span key={`${l.href}-dup-${i}`}>
                       <Link
                         href={l.href}
-                        className="hover:text-[var(--accent)] text-[22px] leading-snug"
+                        className="hover:text-[var(--accent)] text-[22px] leading-snug text-black"
                       >
                         {l.label}
                       </Link>
@@ -160,7 +173,7 @@ export default function Home({
             <MidStrokes />
           </div>
 
-          {/* PHOTOGRAPHY */}
+          {/* PHOTOGRAPHY ---------------------------------------------- */}
           <SectionHeading title="Photography" />
           <ThumbRow thumbs={photoThumbs} />
 
@@ -168,7 +181,7 @@ export default function Home({
             <MidStrokes />
           </div>
 
-          {/* DESIGN */}
+          {/* DESIGN ---------------------------------------------------- */}
           <SectionHeading title="Design" />
           <ThumbRow thumbs={designThumbs} />
 
@@ -176,7 +189,7 @@ export default function Home({
             <MidStrokes />
           </div>
 
-          {/* ABOUT — lower height + fine centering vs footer */}
+          {/* ABOUT ----------------------------------------------------- */}
           <SectionHeading title="About" footerCompensate />
           <ThumbRow thumbs={pubThumbs} footerCompensate />
 
@@ -184,6 +197,7 @@ export default function Home({
         </div>
       </MainLayout>
 
+      {/* marquee anim */}
       <style jsx>{`
         .marquee {
           display: flex;
@@ -207,6 +221,7 @@ export default function Home({
   );
 }
 
+/* ISR ----------------------------------------------- */
 export async function getStaticProps() {
   const [writingData, photoData, designData, aboutData] = await Promise.all([
     getWritingArticles(),
@@ -221,7 +236,7 @@ export async function getStaticProps() {
   };
 }
 
-/* UI helpers */
+/* UI helpers ---------------------------------------- */
 function SectionHeading({
   title,
   footerCompensate = false,
@@ -229,6 +244,9 @@ function SectionHeading({
   title: string;
   footerCompensate?: boolean;
 }) {
+  /* slug path */
+  const path = `/${title.toLowerCase()}`;
+
   return (
     <h2
       className={`col-span-12 md:col-span-2 md:col-start-1 italic text-2xl md:text-3xl
@@ -240,14 +258,18 @@ function SectionHeading({
       }`}
       style={{
         fontFamily: `"Palatino Linotype","Book Antiqua",Palatino,serif`,
+        color: "rgb(108 108 108)",
       }}
     >
-      {/* mobile: match image width and centering (same as 90% imgs) */}
-      <span className="block w-full px-6 md:px-0">
+      {/* mobile wrapper for alignment */}
+      <Link
+        href={path}
+        className="block w-full px-6 md:px-0 no-underline hover:underline-none focus:outline-none"
+      >
         <span className="block max-w-[90%] md:max-w-none mx-auto md:mx-0">
           {title}
         </span>
-      </span>
+      </Link>
     </h2>
   );
 }
