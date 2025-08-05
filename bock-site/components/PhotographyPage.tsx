@@ -137,7 +137,6 @@ export default function PhotographyPage({ initialData }: PhotographyPageProps) {
                 })}
               </ul>
             </div>
-
             <article className="col-span-12 md:col-start-3 md:col-span-6 text-black p-6 md:pt-10 md:px-0 space-y-6">
               {active.imageFull && (
                 <a
@@ -156,9 +155,9 @@ export default function PhotographyPage({ initialData }: PhotographyPageProps) {
                 <p className="italic text-gray-500">{active.title}</p>
               )}
             </article>
-
             {/*  thumbs */}
-            <div className="col-span-12 lg:col-start-3 lg:col-span-7 pt-6">
+            /* thumbs */
+            <div className="col-span-12 md:col-start-3 md:col-span-6 pt-6 px-6 md:px-0">
               <ul className="flex overflow-x-auto gap-4 pb-2 scrollbar-hide">
                 {thumbs.map((t) => (
                   <li key={t.id} className="shrink-0 w-40">
@@ -170,7 +169,7 @@ export default function PhotographyPage({ initialData }: PhotographyPageProps) {
                       <img
                         src={getThumb(t) || ""}
                         alt={t.title}
-                        className="w-full aspect-video object-cover rounded-md border border-gray-300 hover:border-[var(--accent)] transition"
+                        className="w-full aspect-video object-cover border border-gray-300 hover:border-[var(--accent)] transition"
                       />
                     </Link>
                   </li>
