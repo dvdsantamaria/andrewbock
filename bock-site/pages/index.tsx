@@ -1,6 +1,6 @@
-/* pages/index.tsx — Home */
+/* pages/index.tsx - Home */
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import MainLayout from "@/components/MainLayout";
@@ -48,9 +48,36 @@ export default function Home({
   const [designThumbs, setDesignThumbs] = useState<Thumb[]>([]);
   const [pubThumbs, setPubThumbs] = useState<Thumb[]>([]);
 
+  /* mobile list scroll state ------------------------- */
+  const listRef = useRef<HTMLUListElement | null>(null);
+  const [listMaxH, setListMaxH] = useState<number | null>(null);
+  const [enableScroll, setEnableScroll] = useState(false);
+
+  useEffect(() => {
+    // enable scroll on mobile only when there are more than 5 items
+    const isMobile =
+      typeof window !== "undefined" &&
+      window.matchMedia("(max-width: 767px)").matches;
+
+    const ul = listRef.current;
+    if (!isMobile || !ul) return;
+
+    const items = ul.querySelectorAll("li");
+    if (items.length <= 5) return;
+
+    // compute height for 5 items based on first item
+    const first = items[0] as HTMLElement;
+    const liH = first.getBoundingClientRect().height;
+    const ulStyles = window.getComputedStyle(ul);
+    const rowGap = parseFloat(ulStyles.rowGap || "12"); // space-y-3 ~ 12px
+    const maxH = 5 * liH + 4 * rowGap; // 5 items have 4 gaps
+    setListMaxH(Math.ceil(maxH));
+    setEnableScroll(true);
+  }, [writingLinks.length]);
+
   /* pick thumbs -------------------------------------- */
   useEffect(() => {
-    /* photography: 1 random de cada categoría (nature / travel / blur) */
+    // photography: 1 random per category (nature, travel, blur)
     const orderedCats = ["nature", "travel", "blur"];
     setPhotoThumbs(
       orderedCats
@@ -69,7 +96,7 @@ export default function Home({
         .filter(Boolean) as Thumb[]
     );
 
-    /* design: 3 random con imagen */
+    // design: 3 random with image
     setDesignThumbs(
       [...designData]
         .filter(
@@ -95,7 +122,7 @@ export default function Home({
         })
     );
 
-    /* about: 1 random */
+    // about: 1 random
     setPubThumbs(
       aboutData
         .filter((p: any) => p.imageThumb || p.imageFull)
@@ -122,8 +149,14 @@ export default function Home({
           {/* WRITING --------------------------------------------------- */}
           <SectionHeading title="Writing" />
 
-          {/* mobile list */}
-          <ul className="col-span-12 md:hidden space-y-3 text-[19px] leading-relaxed mt-6 mb-8 px-6 max-w-[90%] mx-auto">
+          {/* mobile list (max 5 with subtle scroll) */}
+          <ul
+            ref={listRef}
+            className={`col-span-12 md:hidden space-y-3 text-[19px] leading-relaxed mt-6 mb-8 px-6 max-w-[90%] mx-auto ${
+              enableScroll ? "overflow-y-auto pr-2 custom-scroll" : ""
+            }`}
+            style={listMaxH ? { maxHeight: `${listMaxH}px` } : undefined}
+          >
             {writingLinks.map((l) => (
               <li key={l.href}>
                 <Link href={l.href} className="hover:text-[var(--accent)]">
@@ -173,17 +206,17 @@ export default function Home({
             <MidStrokes />
           </div>
 
-          {/* PHOTOGRAPHY ---------------------------------------------- */}
-          <SectionHeading title="Photography" />
-          <ThumbRow thumbs={photoThumbs} />
+          {/* DESIGN ---------------------------------------------------- */}
+          <SectionHeading title="Design" />
+          <ThumbRow thumbs={designThumbs} />
 
           <div className="col-span-full my-4">
             <MidStrokes />
           </div>
 
-          {/* DESIGN ---------------------------------------------------- */}
-          <SectionHeading title="Design" />
-          <ThumbRow thumbs={designThumbs} />
+          {/* PHOTOGRAPHY ---------------------------------------------- */}
+          <SectionHeading title="Photography" />
+          <ThumbRow thumbs={photoThumbs} />
 
           <div className="col-span-full my-4">
             <MidStrokes />
@@ -215,6 +248,27 @@ export default function Home({
           to {
             transform: translateX(-100%);
           }
+        }
+      `}</style>
+
+      {/* subtle gray scrollbar for mobile list */}
+      <style jsx global>{`
+        .custom-scroll {
+          scrollbar-width: thin;
+          scrollbar-color: #bdbdbd transparent;
+        }
+        .custom-scroll::-webkit-scrollbar {
+          width: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+          background: #bdbdbd;
+          border-radius: 8px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb:hover {
+          background: #9e9e9e;
         }
       `}</style>
     </>
