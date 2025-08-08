@@ -1,4 +1,4 @@
-/* pages/index.tsx - Home */
+/* pages/index.tsx — Home */
 
 import { useEffect, useState, useRef } from "react";
 import Head from "next/head";
@@ -18,9 +18,7 @@ const normalizeImagePath = (path?: string | null): string =>
   path?.startsWith("http") ? path : path ? `/${path.replace(/^\/+/, "")}` : "";
 
 type Thumb = { src: string; href: string; alt: string };
-
-const pickRandom = <T,>(arr: T[]) =>
-  arr[Math.floor(Math.random() * arr.length)];
+const pickRandom = <T,>(arr: T[]) => arr[Math.floor(Math.random() * arr.length)];
 
 /* page props ----------------------------------------- */
 interface HomeProps {
@@ -53,31 +51,64 @@ export default function Home({
   const [listMaxH, setListMaxH] = useState<number | null>(null);
   const [enableScroll, setEnableScroll] = useState(false);
 
+  // recompute max height and toggle scroll for mobile
   useEffect(() => {
-    // enable scroll on mobile only when there are more than 5 items
-    const isMobile =
-      typeof window !== "undefined" &&
-      window.matchMedia("(max-width: 767px)").matches;
+    const recompute = () => {
+      const ul = listRef.current;
+      if (!ul) return;
 
-    const ul = listRef.current;
-    if (!isMobile || !ul) return;
+      const isMobile = window.matchMedia("(max-width: 767px)").matches;
 
-    const items = ul.querySelectorAll("li");
-    if (items.length <= 5) return;
+      if (!isMobile) {
+        setEnableScroll(false);
+        setListMaxH(null);
+        return;
+      }
 
-    // compute height for 5 items based on first item
-    const first = items[0] as HTMLElement;
-    const liH = first.getBoundingClientRect().height;
-    const ulStyles = window.getComputedStyle(ul);
-    const rowGap = parseFloat(ulStyles.rowGap || "12"); // space-y-3 ~ 12px
-    const maxH = 5 * liH + 4 * rowGap; // 5 items have 4 gaps
-    setListMaxH(Math.ceil(maxH));
-    setEnableScroll(true);
+      const items = ul.querySelectorAll("li");
+      if (items.length <= 5) {
+        setEnableScroll(false);
+        setListMaxH(null);
+        return;
+      }
+
+      // height for first 5 items using the top of the 6th (includes margins)
+      const first = items[0] as HTMLElement;
+      const sixth = items[5] as HTMLElement;
+      const maxH = sixth.offsetTop - first.offsetTop;
+
+      setListMaxH(Math.max(0, Math.ceil(maxH)));
+      setEnableScroll(true);
+    };
+
+    // run on mount
+    recompute();
+
+    // run after fonts load (if supported)
+    // avoids zero height if webfonts shift layout
+    // ignore if document.fonts not available
+    // @ts-ignore
+    if (document.fonts?.ready) {
+      // @ts-ignore
+      document.fonts.ready.then(recompute).catch(() => {});
+    }
+
+    // run on resize and orientation
+    window.addEventListener("resize", recompute);
+    window.addEventListener("orientationchange", recompute);
+
+    // one extra tick after layout
+    const t = setTimeout(recompute, 150);
+
+    return () => {
+      window.removeEventListener("resize", recompute);
+      window.removeEventListener("orientationchange", recompute);
+      clearTimeout(t);
+    };
   }, [writingLinks.length]);
 
   /* pick thumbs -------------------------------------- */
   useEffect(() => {
-    // photography: 1 random per category (nature, travel, blur)
     const orderedCats = ["nature", "travel", "blur"];
     setPhotoThumbs(
       orderedCats
@@ -96,7 +127,6 @@ export default function Home({
         .filter(Boolean) as Thumb[]
     );
 
-    // design: 3 random with image
     setDesignThumbs(
       [...designData]
         .filter(
@@ -122,7 +152,6 @@ export default function Home({
         })
     );
 
-    // about: 1 random
     setPubThumbs(
       aboutData
         .filter((p: any) => p.imageThumb || p.imageFull)
@@ -298,7 +327,6 @@ function SectionHeading({
   title: string;
   footerCompensate?: boolean;
 }) {
-  /* slug path */
   const path = `/${title.toLowerCase()}`;
 
   return (
@@ -315,7 +343,6 @@ function SectionHeading({
         color: "rgb(108 108 108)",
       }}
     >
-      {/* mobile wrapper for alignment */}
       <Link
         href={path}
         className="block w-full px-6 md:px-0 no-underline hover:underline-none focus:outline-none"
