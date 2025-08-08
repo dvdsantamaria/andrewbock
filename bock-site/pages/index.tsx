@@ -1,6 +1,6 @@
-/* pages/index.tsx — Home */
+/* pages/index.tsx (Home) */
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import MainLayout from "@/components/MainLayout";
@@ -35,79 +35,18 @@ export default function Home({
   designData,
   aboutData,
 }: HomeProps) {
-  /* writing links ------------------------------------ */
+  /* writing links */
   const writingLinks = writingData.slice(0, 18).map((a) => ({
     label: a.title,
     href: `/writing/${a.category}/${a.slug}`,
   }));
 
-  /* thumbs state ------------------------------------- */
+  /* thumbs state */
   const [photoThumbs, setPhotoThumbs] = useState<Thumb[]>([]);
   const [designThumbs, setDesignThumbs] = useState<Thumb[]>([]);
   const [pubThumbs, setPubThumbs] = useState<Thumb[]>([]);
 
-  /* mobile list scroll state ------------------------- */
-  const listRef = useRef<HTMLUListElement | null>(null);
-  const [listMaxH, setListMaxH] = useState<number | null>(null);
-  const [enableScroll, setEnableScroll] = useState(false);
-
-  // recompute max height and toggle scroll for mobile
-  useEffect(() => {
-    const recompute = () => {
-      const ul = listRef.current;
-      if (!ul) return;
-
-      const isMobile = window.matchMedia("(max-width: 767px)").matches;
-
-      if (!isMobile) {
-        setEnableScroll(false);
-        setListMaxH(null);
-        return;
-      }
-
-      const items = ul.querySelectorAll("li");
-      if (items.length <= 5) {
-        setEnableScroll(false);
-        setListMaxH(null);
-        return;
-      }
-
-      // height for first 5 items using the top of the 6th (includes margins)
-      const first = items[0] as HTMLElement;
-      const sixth = items[5] as HTMLElement;
-      const maxH = sixth.offsetTop - first.offsetTop;
-
-      setListMaxH(Math.max(0, Math.ceil(maxH)));
-      setEnableScroll(true);
-    };
-
-    // run on mount
-    recompute();
-
-    // run after fonts load (if supported)
-    // avoids zero height if webfonts shift layout
-    // ignore if document.fonts not available
-    // @ts-ignore
-    if (document.fonts?.ready) {
-      // @ts-ignore
-      document.fonts.ready.then(recompute).catch(() => {});
-    }
-
-    // run on resize and orientation
-    window.addEventListener("resize", recompute);
-    window.addEventListener("orientationchange", recompute);
-
-    // one extra tick after layout
-    const t = setTimeout(recompute, 150);
-
-    return () => {
-      window.removeEventListener("resize", recompute);
-      window.removeEventListener("orientationchange", recompute);
-      clearTimeout(t);
-    };
-  }, [writingLinks.length]);
-
-  /* pick thumbs -------------------------------------- */
+  /* pick thumbs */
   useEffect(() => {
     const orderedCats = ["nature", "travel", "blur"];
     setPhotoThumbs(
@@ -178,49 +117,33 @@ export default function Home({
           {/* WRITING --------------------------------------------------- */}
           <SectionHeading title="Writing" />
 
-          {/* mobile list (max 5 with subtle scroll) */}
-          <ul
-            ref={listRef}
-            className={`col-span-12 md:hidden space-y-3 text-[19px] leading-relaxed mt-6 mb-8 px-6 max-w-[90%] mx-auto ${
-              enableScroll ? "overflow-y-auto pr-2 custom-scroll" : ""
-            }`}
-            style={listMaxH ? { maxHeight: `${listMaxH}px` } : undefined}
-          >
-            {writingLinks.map((l) => (
-              <li key={l.href}>
-                <Link href={l.href} className="hover:text-[var(--accent)]">
-                  {l.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          {/* marquee (mobile and desktop) */}
+          <div className="flex col-span-12 md:col-start-3 md:col-span-9 items-center min-h-[120px] md:min-h-[160px]">
+            <div className="relative w-full overflow-hidden px-6 md:px-0">
+              <div className="pointer-events-none absolute left-0 top-0 h-full w-10 md:w-16 bg-gradient-to-r from-[var(--background)] to-transparent z-10" />
+              <div className="pointer-events-none absolute right-0 top-0 h-full w-10 md:w-16 bg-gradient-to-l from-[var(--background)] to-transparent z-10" />
 
-          {/* desktop marquee */}
-          <div className="hidden md:flex md:col-start-3 md:col-span-9 md:min-h-[160px] items-center">
-            <div className="relative w-full overflow-hidden">
-              <div className="pointer-events-none absolute left-0 top-0 h-full w-16 bg-gradient-to-r from-[var(--background)] to-transparent z-10" />
-              <div className="pointer-events-none absolute right-0 top-0 h-full w-16 bg-gradient-to-l from-[var(--background)] to-transparent z-10" />
               <div className="marquee whitespace-nowrap relative z-0 text-black">
-                <div className="marquee-track inline-flex gap-12 pr-12">
+                <div className="marquee-track inline-flex gap-8 pr-8 md:gap-12 md:pr-12">
                   {writingLinks.map((l) => (
                     <Link
                       key={l.href}
                       href={l.href}
-                      className="hover:text-[var(--accent)] text-[22px] leading-snug text-black"
+                      className="hover:text-[var(--accent)] text-[18px] md:text-[22px] leading-snug text-black"
                     >
                       {l.label}
                     </Link>
                   ))}
                 </div>
                 <div
-                  className="marquee-track inline-flex gap-12 pr-12"
+                  className="marquee-track inline-flex gap-8 pr-8 md:gap-12 md:pr-12"
                   aria-hidden="true"
                 >
                   {writingLinks.map((l, i) => (
                     <span key={`${l.href}-dup-${i}`}>
                       <Link
                         href={l.href}
-                        className="hover:text-[var(--accent)] text-[22px] leading-snug text-black"
+                        className="hover:text-[var(--accent)] text-[18px] md:text-[22px] leading-snug text-black"
                       >
                         {l.label}
                       </Link>
@@ -261,44 +184,9 @@ export default function Home({
 
       {/* marquee anim */}
       <style jsx>{`
-        .marquee {
-          display: flex;
-          width: 200%;
-        }
-        .marquee-track {
-          flex: 0 0 50%;
-          will-change: transform;
-          animation: marquee 28s linear infinite;
-        }
-        @keyframes marquee {
-          from {
-            transform: translateX(0);
-          }
-          to {
-            transform: translateX(-100%);
-          }
-        }
-      `}</style>
-
-      {/* subtle gray scrollbar for mobile list */}
-      <style jsx global>{`
-        .custom-scroll {
-          scrollbar-width: thin;
-          scrollbar-color: #bdbdbd transparent;
-        }
-        .custom-scroll::-webkit-scrollbar {
-          width: 6px;
-        }
-        .custom-scroll::-webkit-scrollbar-track {
-          background: transparent;
-        }
-        .custom-scroll::-webkit-scrollbar-thumb {
-          background: #bdbdbd;
-          border-radius: 8px;
-        }
-        .custom-scroll::-webkit-scrollbar-thumb:hover {
-          background: #9e9e9e;
-        }
+        .marquee { display: flex; width: 200%; }
+        .marquee-track { flex: 0 0 50%; will-change: transform; animation: marquee 28s linear infinite; }
+        @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-100%); } }
       `}</style>
     </>
   );
